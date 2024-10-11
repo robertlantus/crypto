@@ -1,0 +1,20 @@
+{
+  "name": "coin-gecko-v3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "server.js",
+    "dev": "node --watch --env-file=.env server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "third prototype",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.21.1",
+    "node-cron": "^3.0.3",
+    "redis": "^4.7.0"
+  }
+}
