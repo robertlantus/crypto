@@ -4,7 +4,7 @@ import { fetchAndCacheCryptoData } from './fetchCryptoData.js';
 
 export const startApp = async () => {
     try {
-        // Fetch crypto data immediately after Redis starts
+        // Fetch crypto data and cache it to Redis after it starts
         console.log('Initial fetch of crypto data...');
         await fetchAndCacheCryptoData();
         

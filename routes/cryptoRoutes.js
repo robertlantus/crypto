@@ -31,13 +31,18 @@ router.get('/coins/markets', async (req, res) => {
 // Route to get coins by params ids
 // GET http://localhost:3000/api/coins/markets/query/monero,solana,bitcoin
 
-// router.get('/coins/markets/query/:ids', async (req, res) => {    // params
-router.get('/coins/markets/query', async (req, res) => {    // query
+// router.get('/coins/markets/query/:ids', async (req, res) => {    // Params
+router.get('/coins/markets/query', async (req, res) => {    // Query
     try {
+        // Params
         // const ids = req.params.ids;
+        // const ids = req.params.ids ? req.params.ids.split(',') : [];
+        // console.log(req.params);
+
+        // Query
         // const ids = req.query.ids;
         const ids = req.query.ids ? req.query.ids.split(',') : [];
-        // console.log(ids);
+        // console.log(req.query);
         const cachedData = await getCryptoData();
 
         if (cachedData && ids.length > 0) {
@@ -54,7 +59,6 @@ router.get('/coins/markets/query', async (req, res) => {    // query
         res.status(500).json({ message: 'Error retrieving data', error });
     }
 });
-
 
 
 // First -- Get all coins and query selected
