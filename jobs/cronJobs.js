@@ -1,3 +1,4 @@
+// cronJobs.js
 
 import cron from 'node-cron';
 import { fetchAndCacheCryptoData } from '../services/fetchCryptoData.js';
@@ -6,7 +7,7 @@ import { fetchAndCacheCryptoData } from '../services/fetchCryptoData.js';
 
 export const scheduleCronJobs = () => {
 
-    cron.schedule('*/5 * * * *', () => {
+    cron.schedule('*/55 * * * *', () => {
         console.log('Fetching crypto data from CoinGecko...every 5 minutes');
         fetchAndCacheCryptoData();
     });

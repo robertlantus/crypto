@@ -1,5 +1,5 @@
+// startApp.js
 
-// import cron from 'node-cron';
 import { fetchAndCacheCryptoData } from './fetchCryptoData.js';
 
 export const startApp = async () => {

@@ -1,8 +1,6 @@
-
+// server.js
 
 import express from 'express';
-// Redis setup
-// import redisClient from './config/redisConfig.js';
 // startApp
 import { startApp } from './services/startApp.js';
 // Cron jobs
