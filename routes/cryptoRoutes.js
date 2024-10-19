@@ -2,7 +2,8 @@
 
 import express from 'express';
 import { getCryptoData } from '../services/redisService.js';
-import { fetchMarketDataForCoins } from '../services/fetchCryptoData.js';
+// import { fetchMarketDataForCoins } from '../services/fetchCryptoData.js';
+import { fetchMarketDataForCoins } from '../services/cryptoDataService.js';
 import { fetchPriceData, fetchCoinDetails } from '../services/coinGeckoService.js';
 
 const router = express.Router();

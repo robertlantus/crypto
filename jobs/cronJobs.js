@@ -1,7 +1,8 @@
 // cronJobs.js
 
 import cron from 'node-cron';
-import { fetchAndCacheCryptoData } from '../services/fetchCryptoData.js';
+// import { fetchAndCacheCryptoData } from '../services/fetchCryptoData.js';
+import { fetchAndCacheCryptoData } from '../services/cryptoDataService.js';
 
 // Environment variables
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '*/55 * * * *'; 
