@@ -1,55 +1,67 @@
 // cryptoRoutes.js
 
 import express from 'express';
-import { getCryptoData, fetchPriceData, fetchCoinDetails } from '../services/fetchCryptoData.js';
+import { getCryptoData } from '../services/redisService.js';
+import { fetchMarketDataForCoins } from '../services/fetchCryptoData.js';
+import { fetchPriceData, fetchCoinDetails } from '../services/coinGeckoService.js';
 
 const router = express.Router();
 
-// Route to get all cached coins from /coins/markets
-// GET http://localhost:3000/api/coins/markets
+// Route to get all cached coins from /coins/markets 
+// GET http://localhost:3000/api/coins/markets --> OK
 
 router.get('/coins/markets', async (req, res) => {
     try {
-        const fallbackUrl = 'https://api.coingecko.com/api/v3/coins/markets';
-        const fallbackParams = {
-            vs_currency: 'usd',
-            order: 'market_cap_desc',
-            per_page: 100,
-            page: 1,
-        };
-        const marketData = await getCryptoData('cryptoMarketsData', fallbackUrl, fallbackParams);
+        const cachedData = await getCryptoData('cryptoMarketsData');
 
-        return res.status(200).json(marketData);
-
+        if (cachedData) {
+            return res.status(200).json(cachedData);
+        } else {
+            return res.status(404).json({ message: 'No cached market data in Redis cache' });
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving market data', error });
     }
 });
 
-// Route to fetch price data from /simple/price based on coin ids by query
-// GET http://localhost:3000/api/simple/price
+// Route to get selected cached coins from /coins/markets by params
+// GET http://localhost:3000/api/coins/markets/bitcoin,solana --> OK
 
-router.get('/simple/price', async (req, res) => {    
+router.get('/coins/markets/:ids', async (req, res) => {
     try {
-        // const ids = req.query.ids ? req.query.ids.split(',') : [];   // Multiple coins
-        const ids = req.query.ids;
+        const coinIds = req.params.ids;
+
+        if (!coinIds) {
+            return res.status(400).json({ message: 'Please provide coin ids in the URL parameters' });
+        }
+
+        // Fetch data for the provided coin ids from CoinGecko or Redis
+        const marketData = await fetchMarketDataForCoins(coinIds);
+
+        if (marketData) {
+            return res.status(200).json(marketData);
+        } else {
+            return res.status(404).json({ message: 'No data found for the provided coin ids' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving coin market data', error });
+    }
+});
+
+// Route to fetch price data from /simple/price based on coin ids by params
+// GET http://localhost:3000/api/simple/price/bitcoin --> OK
+
+router.get('/simple/price/:ids', async (req, res) => {    
+    try {
+        const ids = req.params.ids ? req.params.ids.split(',') : [];   // Supports multiple coins
+        // const ids = req.params.ids;
+        // console.log(ids, ids.length);
 
         if (ids.length === 0) {
             return res.status(400).json({ message: 'Please provide coin ids' });
         }
-
-        const fallbackUrl = 'https://api.coingecko.com/api/v3/simple/price';
-        const fallbackParams = {
-            ids,
-            vs_currencies: 'usd',
-            include_market_cap: true,
-            include_24hr_vol: true,
-            include_24hr_change: true,
-            include_last_updated_at: true,
-            precision: '2'
-        };
         
-        const priceData = await getCryptoData(`priceData:${ids}`, fallbackUrl, fallbackParams);
+        const priceData = await fetchPriceData(ids)
         return res.status(200).json(priceData);
 
     } catch (error) {
@@ -57,58 +69,18 @@ router.get('/simple/price', async (req, res) => {
     }
 });
 
-// Route to fetch price data from /simple/price based on coin ids by param
-// GET http://localhost:3000/api/simple/price?ids=bitcoin
-
-// router.get('/simple/price/:ids', async (req, res) => {    
-//     try {
-//         // const ids = req.query.ids ? req.query.ids.split(',') : [];   // Multiple coins
-//         const ids = req.params.ids;
-
-//         if (ids.length === 0) {
-//             return res.status(400).json({ message: 'Please provide coin ids' });
-//         }
-        
-//         const priceData = await fetchPriceData(ids)
-//         return res.status(200).json(priceData);
-
-//     } catch (error) {
-//         return res.status(500).json({ message: 'Error retrieving price data', error });
-//     }
-// });
-
-// // Route to get detailed coin info from /coins/{id} by params
-// GET http://localhost:3000/api/coins/id
+// Route to fetch detailed coin info from /coins/{id} by params
+// GET http://localhost:3000/api/coins/id --> OK
 
 router.get('/coins/:id', async (req, res) => {
     try {
         const coinId = req.params.id;
+        const coinDetails = await fetchCoinDetails(coinId);
 
-        // Define the CoinGecko URL and parameters for fetching the coin details
-        const fallbackUrl = `https://api.coingecko.com/api/v3/coins/${coinId}`;
-        const fallbackParams = {}; // No additional params required for this endpoint
-
-        // Attempt to fetch from Redis or fallback to CoinGecko if Redis fails
-        const coinDetails = await getCryptoData(`coinDetails:${coinId}`, fallbackUrl, fallbackParams);
-        
         return res.status(200).json(coinDetails);
-
     } catch (error) {
-        return res.status(500).json({ message: `Error retrieving details for coin ${req.params.id}`, error });
+        return res.status(500).json({ message: 'Error retrieving coin details', error });
     }
 });
-
-// // Route to get detailed coin info from /coins/{id} by query
-// GET http://localhost:3000/api/coins?id=bitcoin
-
-// router.get('/coins', async (req, res) => {
-//     try {
-//         const coinId = req.query.id;
-//         const coinDetails = await fetchCoinDetails(coinId);
-//         return res.status(200).json(coinDetails);
-//     } catch (error) {
-//         return res.status(500).json({ message: 'Error retrieving coin details', error });
-//     }
-// });
 
 export default router;
