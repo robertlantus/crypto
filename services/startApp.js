@@ -1,6 +1,5 @@
 // startApp.js
 
-// import { fetchAndCacheCryptoData } from './fetchCryptoData.js';
 import { fetchAndCacheCryptoData } from "./cryptoDataService.js";
 
 export const startApp = async () => {

@@ -2,7 +2,6 @@
 
 import express from 'express';
 import { getCryptoData } from '../services/redisService.js';
-// import { fetchMarketDataForCoins } from '../services/fetchCryptoData.js';
 import { fetchMarketDataForCoins } from '../services/cryptoDataService.js';
 import { fetchPriceData, fetchCoinDetails } from '../services/coinGeckoService.js';
 
@@ -12,6 +11,7 @@ const router = express.Router();
 // GET http://localhost:3000/api/coins/markets --> OK
 
 router.get('/coins/markets', async (req, res) => {
+
     try {
         const cachedData = await getCryptoData('cryptoMarketsData');
 
@@ -20,6 +20,7 @@ router.get('/coins/markets', async (req, res) => {
         } else {
             return res.status(404).json({ message: 'No cached market data in Redis cache' });
         }
+
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving market data', error });
     }
@@ -29,6 +30,7 @@ router.get('/coins/markets', async (req, res) => {
 // GET http://localhost:3000/api/coins/markets/bitcoin,solana --> OK
 
 router.get('/coins/markets/:ids', async (req, res) => {
+
     try {
         const coinIds = req.params.ids;
 
@@ -44,6 +46,7 @@ router.get('/coins/markets/:ids', async (req, res) => {
         } else {
             return res.status(404).json({ message: 'No data found for the provided coin ids' });
         }
+
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving coin market data', error });
     }
@@ -53,6 +56,7 @@ router.get('/coins/markets/:ids', async (req, res) => {
 // GET http://localhost:3000/api/simple/price/bitcoin --> OK
 
 router.get('/simple/price/:ids', async (req, res) => {    
+
     try {
         const ids = req.params.ids ? req.params.ids.split(',') : [];   // Supports multiple coins
         // const ids = req.params.ids;
@@ -74,11 +78,13 @@ router.get('/simple/price/:ids', async (req, res) => {
 // GET http://localhost:3000/api/coins/id --> OK
 
 router.get('/coins/:id', async (req, res) => {
+
     try {
         const coinId = req.params.id;
         const coinDetails = await fetchCoinDetails(coinId);
 
         return res.status(200).json(coinDetails);
+
     } catch (error) {
         return res.status(500).json({ message: 'Error retrieving coin details', error });
     }

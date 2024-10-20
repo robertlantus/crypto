@@ -23,16 +23,11 @@ export const fetchAndCacheCryptoData = async () => {
 export const fetchMarketDataForCoins = async (ids) => {
 
     try {
-        // Redis key for the top 100 coins
-        // const redisKey = 'cryptoMarketsData';
-
         // Get the full market data from Redis
-        // const cachedData = await getCryptoData(redisKey);
 
         const cachedData = await getCryptoData('cryptoMarketsData');
 
         if (cachedData) {
-            
             // Handle multiple coin IDs, ex: 'bitcoin,ethereum'
             const requestedIds = ids.split(',');
 
@@ -46,10 +41,10 @@ export const fetchMarketDataForCoins = async (ids) => {
                 console.log(`No market data found for the requested coin IDs: ${ids}`);
                 return null;
             }
-        } else {
-            console.log(`No cached market data found in Redis.`);
-            return null;
         }
+        console.log(`No cached market data found in Redis.`);
+        return null;
+    
     } catch (error) {
         console.error(`Error fetching data for coins ${ids} from Redis:`, error);
         throw error;

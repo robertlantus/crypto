@@ -37,6 +37,7 @@ export const fetchMarketData = async () => {
 // Fetch price details from /simple/price based on coin ids
 
 export const fetchPriceData = async (ids) => {
+
     try {
         const priceParams = {
             params: {
@@ -65,6 +66,7 @@ export const fetchPriceData = async (ids) => {
 // Fetch detailed coin information from /coins/{id} for a specific coin
 
 export const fetchCoinDetails = async (id) => {
+    
     try {
         const detailResponse = await axios.get(coinDetailsUrl(id));
         const detailedCoinData = detailResponse.data;
