@@ -43,9 +43,9 @@ router.get('/coins/markets/:ids', async (req, res) => {
 
         if (marketData) {
             return res.status(200).json(marketData);
-        } else {
-            return res.status(404).json({ message: 'No data found for the provided coin ids' });
-        }
+        } 
+            
+        return res.status(404).json({ message: `No data found for the provided coin ${ids}` });
 
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving coin market data', error });

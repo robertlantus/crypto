@@ -8,6 +8,7 @@ const REDIS_PORT = process.env.PORT || 6379;
 // const redisClient = redis.createClient(REDIS_PORT);
 
 //  Redis Connection Timeout and Retry
+
 const redisClient = redis.createClient({
     host: 'localhost',
     port: REDIS_PORT,

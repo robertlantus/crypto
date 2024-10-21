@@ -1,6 +1,8 @@
 // server.js
 
 import express from 'express';
+// Morgan logging
+import customMorganFormat from './config/morgan.js';
 // startApp
 import { startApp } from './services/startApp.js';
 // Cron jobs
@@ -20,6 +22,9 @@ startApp();
 scheduleCronJobs(); 
 
 // Middleware space
+
+// Use custom Morgan middleware for logging HTTP requests
+app.use(customMorganFormat);
 
 
 // Use the crypto routes

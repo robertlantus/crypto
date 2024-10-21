@@ -1,0 +1,5 @@
+GET /api/simple/price/monero 200 1103.238 ms
+GET /api/coins/markets 200 3.932 ms
+GET /api/coins/markets/moner 500 2.303 ms
+GET /api/coins/monero 200 684.276 ms
+GET /api/coins/markets/monero 200 2.235 ms

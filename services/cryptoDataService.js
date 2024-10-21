@@ -37,10 +37,11 @@ export const fetchMarketDataForCoins = async (ids) => {
             // Return filtered data or null if no matching data found
             if (filteredData.length > 0) {
                 return filteredData;
-            } else {
-                console.log(`No market data found for the requested coin IDs: ${ids}`);
-                return null;
             }
+             
+            console.log(`No market data found for the requested coin ids: ${ids}`);
+            return null;
+
         }
         console.log(`No cached market data found in Redis.`);
         return null;
