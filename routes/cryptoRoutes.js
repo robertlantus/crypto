@@ -31,21 +31,34 @@ router.get('/coins/markets', async (req, res) => {
 
 router.get('/coins/markets/:ids', async (req, res) => {
 
-    try {
-        const coinIds = req.params.ids;
+    const ids = req.params.ids;
+    console.log(ids, typeof ids);
+    
+    // Check if ids are provided and valid (non-empty and trimmed)
+    if (!ids || !ids.trim()) {
+        return res.status(400).json({ message: 'Please provide valid coin ids in the URL parameters' }); // Bad request
+    }
 
-        if (!coinIds) {
-            return res.status(400).json({ message: 'Please provide coin ids in the URL parameters' });
+    try {
+        // Split and trim the coin ids from the URL
+        const coinIds = ids.split(',').map(id => id.trim()).filter(id => id);
+        console.log(coinIds);
+
+        // If no valid ids after trimming and filtering, return 400
+        if (coinIds.length === 0) {
+            return res.status(400).json({ message: 'Please provide valid coin ids in the URL parameters' });
         }
 
-        // Fetch data for the provided coin ids from CoinGecko or Redis
+        // Fetch data for the provided coin ids from Redis
         const marketData = await fetchMarketDataForCoins(coinIds);
 
-        if (marketData) {
-            return res.status(200).json(marketData);
+        // If no valid data returned, it's likely the coin ids are invalid
+        if (!marketData || marketData.length === 0) {
+            // If no data is found for valid coins, return 404
+            return res.status(400).json({ message: `No data found for the provided coin ids: ${ids}` });
         } 
-            
-        return res.status(404).json({ message: `No data found for the provided coin ${ids}` });
+        // Return the valid market data
+        return res.status(200).json(marketData);
 
     } catch (error) {
         res.status(500).json({ message: 'Error retrieving coin market data', error });

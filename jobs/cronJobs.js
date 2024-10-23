@@ -11,7 +11,7 @@ const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '*/55 * * * *';
 export const scheduleCronJobs = () => {
 
     cron.schedule(CRON_SCHEDULE, () => {
-        console.log('Fetching crypto data from CoinGecko...every 5 minutes');
+        // console.log('Fetching crypto data from CoinGecko...every 5 minutes');
         fetchAndCacheCryptoData();
     });
 };
