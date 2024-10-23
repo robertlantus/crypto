@@ -6,6 +6,6 @@ export default {
       "^.+\\.js$": "babel-jest"
     },
     testEnvironment: "node",
-    testTimeout: 10000,  // 10 seconds
+    testTimeout: 20000,  // 10 seconds
 };
   

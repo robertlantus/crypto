@@ -2,10 +2,6 @@
 // app.test.js
 // Testing using Jest
 
-// import {jest} from '@jest/globals';
-
-// jest.useFakeTimers();
-
 import request from 'supertest';
 
 // Import the app without starting the server
@@ -39,7 +35,7 @@ describe('GET /api/coins/markets/:ids', () => {
         const response = await request(app).get('/api/coins/markets/bitcoin,ethereum');
 
         expect(response.statusCode).toBe(200);  // OK
-        expect(Array.isArray(response.body)).toBe(true)   
+        expect(Array.isArray(response.body)).toBe(true);   
         expect(response.body.length).toBeGreaterThan(0);
     });
 
@@ -59,4 +55,8 @@ describe('GET /api/coins/markets/:ids', () => {
     //     expect(response.body).toHaveProperty('message', 'Error retrieving coin market data');
     // });
 });
+
+
+
+
 

@@ -37,7 +37,7 @@ app.use('/api', cryptoRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
     // Start the Express server only if not in test mode
-    app.listen(3000, () => {
+    const server = app.listen(PORT, () => {
         console.log(`Server running on port: ${PORT}`);
     });
 }

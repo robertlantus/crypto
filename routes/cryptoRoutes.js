@@ -72,8 +72,6 @@ router.get('/simple/price/:ids', async (req, res) => {
 
     try {
         const ids = req.params.ids ? req.params.ids.split(',') : [];   // Supports multiple coins
-        // const ids = req.params.ids;
-        // console.log(ids, ids.length);
 
         if (ids.length === 0) {
             return res.status(400).json({ message: 'Please provide coin ids' });
