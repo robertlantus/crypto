@@ -150,3 +150,14 @@ GET /api/simple/price/bitcoin 200 316.991 ms
 GET /api/coins/markets 200 13.052 ms
 GET /api/coins/markets/bitcoin,ethereum 200 13.619 ms
 GET /api/coins/markets/invalidcoin 400 12.222 ms
+GET /api/coins/markets 200 14.042 ms
+GET /api/coins/markets/bitcoin,ethereum 200 12.045 ms
+GET /api/coins/markets/invalidcoin 400 9.091 ms
+GET /api/coins/markets 200 15.028 ms
+GET /api/coins/markets/bitcoin,ethereum 200 12.690 ms
+GET /api/coins/markets/invalidcoin 400 13.914 ms
+GET /api/simple/price/monero,bitcoin 200 375.435 ms
+GET /api/coins/monero 200 1143.125 ms
+GET /api/coins/markets 200 2.918 ms
+GET /api/coins/markets/bitcoin,monero 200 4.528 ms
+GET /api/coins/markets/bitcoin,monero 200 4.345 ms

@@ -32,7 +32,7 @@ router.get('/coins/markets', async (req, res) => {
 router.get('/coins/markets/:ids', async (req, res) => {
 
     const ids = req.params.ids;
-    console.log(ids, typeof ids);
+    // console.log(ids, typeof ids);
     
     // Check if ids are provided and valid (non-empty and trimmed)
     if (!ids || !ids.trim()) {
@@ -42,7 +42,7 @@ router.get('/coins/markets/:ids', async (req, res) => {
     try {
         // Split and trim the coin ids from the URL
         const coinIds = ids.split(',').map(id => id.trim()).filter(id => id);
-        console.log(coinIds);
+        // console.log(coinIds);
 
         // If no valid ids after trimming and filtering, return 400
         if (coinIds.length === 0) {
