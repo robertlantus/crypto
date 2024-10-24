@@ -5,13 +5,13 @@ import redisClient from '../config/redisConfig.js';
 
 // Function to cache data in Redis
 
-export const cacheDataInRedis = async (key, data, expiration = 3600) => {
+export const cacheDataInRedis = async (key, data, expiration = 600) => {
 
     try {
         await redisClient.set(key, JSON.stringify(data));
         await redisClient.expire(key, expiration);
         // console.log(`${key} cached successfully.`);
-        
+
     } catch (error) {
         console.error(`Error caching ${key} in Redis:`, error);
     }

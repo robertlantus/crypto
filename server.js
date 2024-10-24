@@ -13,7 +13,6 @@ import cryptoRoutes from './routes/cryptoRoutes.js';
 
 // Environment variables
 const PORT = process.env.PORT || 3000;
-const JEST_PORT = process.env.JEST_PORT || 3001;
 
 // Initialize Express app
 export const app = express();
