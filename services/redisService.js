@@ -6,7 +6,7 @@ import { getAllCryptoData } from './mongoService.js';
 
 // Function to cache data in Redis
 
-export const cacheDataInRedis = async (key, data, expiration = 600) => {
+export const cacheDataInRedis = async (key, data, expiration = 360) => {
 
     try {
         await redisClient.set(key, JSON.stringify(data));

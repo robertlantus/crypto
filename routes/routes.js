@@ -2,8 +2,9 @@
 // routes.js
 
 import express from 'express';
-import { getAllCryptoData } from '../services/mongoService.js';
+// import { getAllCryptoData } from '../services/mongoService.js';
 import { getCryptoData } from '../services/redisService.js';
+import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ const router = express.Router();
 router.get('/coins/markets', async (req, res) => {
     try {
 
-        const cachedKey = 'allCryptos';
+        const cachedKey = COIN_MARKET_KEY;
 
         // Fetch data from Redis or MongoDB
 
