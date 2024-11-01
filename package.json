@@ -1,0 +1,19 @@
+{
+  "name": "gecko",
+  "version": "1.0.0",
+  "description": "personal project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "server.js",
+    "dev": "node --watch server.js"
+  },
+  "author": "Robert Lantus",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.21.1",
+    "mongoose": "^8.7.3",
+    "redis": "^4.7.0"
+  }
+}
