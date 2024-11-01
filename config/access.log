@@ -1,0 +1,2 @@
+GET /api/coins/markets 200 67.718 ms
+GET /api/coins/markets 200 2.589 ms

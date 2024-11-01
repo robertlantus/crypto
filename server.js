@@ -6,7 +6,8 @@ import express from 'express';
 import { startApp } from './services/startApp.js';
 import router from './routes/routes.js';
 import { connectDB } from './config/mongoConfig.js';
-import cron from './jobs/cronJobs.js';
+import { cronJob } from './jobs/cronJobs.js';
+import customMorganFormat from './config/morgan.mjs';
 
 const PORT = process.env.PORT || 3333;
 
@@ -17,10 +18,13 @@ connectDB();
 
 // Start the initial fetch and the cron job
 startApp();
-cron();
+cronJob();
 
 // JSON parsing middleware
 app.use(express.json());
+
+// Use custom Morgan middleware for logging HTTP requests
+app.use(customMorganFormat);
 
 // Routes
 app.use('/api', router);

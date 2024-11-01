@@ -16,5 +16,8 @@
     "mongoose": "^8.7.3",
     "node-cron": "^3.0.3",
     "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
   }
 }
