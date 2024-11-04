@@ -35,7 +35,7 @@ export const storeCryptoData = async (data) => {
 
 // Function to retrieve all crypto data from MongoDB
 
-export const getAllCryptoData = async () => {
+export const getAllCryptoDataFromMongo = async () => {
     try {
         const data = await Crypto.find({});
         return data;
@@ -48,7 +48,7 @@ export const getAllCryptoData = async () => {
 
 // Function to retrieve specific coins by their IDs from MongoDB
 
-export const getCryptoDataById = async (ids) => {
+export const getCryptoDataByIdFromMongo = async (ids) => {
     try {
         const data = await Crypto.find({id: { $in: ids } });
         return data;

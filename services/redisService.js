@@ -2,7 +2,7 @@
 // redisService.js
 
 import redisClient from '../config/redisConfig.js';
-import { getAllCryptoData } from './mongoService.js';
+import { getAllCryptoDataFromMongo, getCryptoDataByIdFromMongo } from './mongoService.js';
 
 // Function to cache data in Redis
 
@@ -20,7 +20,7 @@ export const cacheDataInRedis = async (key, data, expiration = 360) => {
 
 // Function to retrieve cached data from Redis by key, with fallback to MongoDB if not found
 
-export const getCryptoData = async (key) => {
+export const getAllCryptoData = async (key) => {
 
     try {
         // Attempt to retrieve data from Redis
@@ -34,7 +34,7 @@ export const getCryptoData = async (key) => {
         // If data is not found in Redis, fetch from MongoDB
         console.log('No data in Redis, fetching from MongoDB');
 
-        const dbData = await getAllCryptoData();
+        const dbData = await getAllCryptoDataFromMongo();
 
         if (dbData && dbData.length > 0) {
             // Cache the MongoDB data in Redis for future requests
@@ -54,18 +54,30 @@ export const getCryptoData = async (key) => {
 
 // Function to retrieve specific coins by IDs from Redis
 
-export const getCryptoDataByIdFromRedis = async (key, ids) => {
+export const getCryptoDataById = async (key, ids) => {
 
     try {
         // Attempt to retrieve data from Redis
         const cachedData = await redisClient.get(key);
 
         if (cachedData) {
-            console.log(`Data fetched from Redis cache for ${ids}`);
+            console.log(`Data fetched from Redis cache for: ${ids}`);
             const allData = JSON.parse(cachedData);
             return allData.filter(coin => ids.includes(coin.id));
         }
 
+        // If data is not found in Redis, fetch from MongoDB
+        console.log('No data in Redis, fetching from MongoDB, by id');
+
+        const dbDataById = await getCryptoDataByIdFromMongo(ids);
+
+        if (dbDataById && dbDataById.length > 0) {
+            await cacheDataInRedis(key, dbDataById);
+            console.log('Data cached in Redis, by id');
+            return dbDataById;
+        }
+
+        // Return null if no data found in MongoDB either
         return null;
 
     } catch (error) {
