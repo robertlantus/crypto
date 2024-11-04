@@ -3,7 +3,7 @@
 
 import express from 'express';
 // import { getAllCryptoData } from '../services/mongoService.js';
-import { getCryptoData, getCryptoDataByIdFromRedis } from '../services/redisService.js';
+import { cacheDataInRedis, getCryptoData, getCryptoDataByIdFromRedis } from '../services/redisService.js';
 import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
 import { getCryptoDataById } from '../services/mongoService.js';
 
@@ -43,24 +43,30 @@ router.get('/coins/markets/:ids', async (req, res) => {
 
     try {
         const cachedKey = COIN_MARKET_KEY;
-
-        const coinsData = await getCryptoDataByIdFromRedis(cachedKey, idsArr);
+        
+        // Attempt to fetch data from Redis
+        let coinsData = await getCryptoDataByIdFromRedis(cachedKey, idsArr);
 
         if (!coinsData || coinsData.length === 0) {
             console.log('Error retrieving data from Redis');
 
+            // If not found in Redis, fetch from MongoDB
             coinsData = await getCryptoDataById(idsArr);
 
+            if (coinsData.length > 0) {
+                // Cache data in Redis
+                await cacheDataInRedis(cachedKey, coinsData);
+            }
+
             if (!coinsData || coinsData.length === 0) {
-                console.log('Error retrieving data from MongoDB');
-                return null;
+                return res.status(404).json({ message: `No data found for the provided ids: ${ids}` });
             }
         }
 
         return res.status(200).json(coinsData);
         
     } catch (error) {
-        console.error('Error retrieving market data from Redis or MongoDB:', error);
+        console.error('Error retrieving data by ids from Redis or MongoDB:', error);
         res.status(500).json({ message: 'Error retrieving market data', error });
     }
 });
