@@ -1,2 +1,13 @@
 GET /api/coins/markets 200 67.718 ms
 GET /api/coins/markets 200 2.589 ms
+GET /api/coins/markets 200 67.282 ms
+GET /api/coins/markets 200 3.111 ms
+GET /api/coins/markets/solana 200 3.729 ms
+GET /api/coins/markets/solana,monero 200 1.619 ms
+GET /api/coins/markets/solan 500 22.289 ms
+GET /api/coins/markets/solan 500 19.979 ms
+GET /api/coins/markets/ 200 3.841 ms
+GET /api/coins/markets 200 7.228 ms
+GET /api/coins/markets/monero 200 2.473 ms
+GET /api/coins/markets/moner 500 12.490 ms
+GET /api/coins/markets/monero 200 1.580 ms

@@ -46,15 +46,15 @@ export const getAllCryptoData = async () => {
     }
 };
 
-// Function to retrieve specific crypto data by ID from MongoDB
+// Function to retrieve specific coins by their IDs from MongoDB
 
-export const getCryptoDataById = async (id) => {
+export const getCryptoDataById = async (ids) => {
     try {
-        const data = await Crypto.findOne( {id} );
+        const data = await Crypto.find({id: { $in: ids } });
         return data;
         
     } catch (error) {
-        console.error(`Error retrieving data for ${id} from MongoDB:`, error);
+        console.error(`Error retrieving data for ${ids} from MongoDB:`, error);
         throw error;
     }
 }

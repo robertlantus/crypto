@@ -51,3 +51,25 @@ export const getCryptoData = async (key) => {
         return null;
     }
 };
+
+// Function to retrieve specific coins by IDs from Redis
+
+export const getCryptoDataByIdFromRedis = async (key, ids) => {
+
+    try {
+        // Attempt to retrieve data from Redis
+        const cachedData = await redisClient.get(key);
+
+        if (cachedData) {
+            console.log(`Data fetched from Redis cache for ${ids}`);
+            const allData = JSON.parse(cachedData);
+            return allData.filter(coin => ids.includes(coin.id));
+        }
+
+        return null;
+
+    } catch (error) {
+        console.error(`Error fetching ${key} by IDs from Redis:`, error);
+        return null;
+    }
+}
