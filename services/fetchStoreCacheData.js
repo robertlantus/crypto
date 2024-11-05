@@ -28,6 +28,7 @@ export const fetchStoreCacheData = async () => {
         // console.log(`Data successfully stored in MongoDB: ${result.upsertedCount} new entries, ${result.modifiedCount} updated`);    // Works for Bulk write only
 
         // Cache data in Redis at start to keep in sync with MongoDB
+        
         await cacheDataInRedis(COIN_MARKET_KEY, data, 360);
 
         // console.log(result);

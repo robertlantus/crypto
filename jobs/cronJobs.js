@@ -21,18 +21,15 @@ export const cronJob = () => {
         console.log('Fetching crypto data from CoinGecko...every 5 minutes');
     
         try {
-            // Fetch data from the CoinGecko API and store it in MongoDB
-            // fetchData also stores data in MongoDB by calling storeCryptoData
+            // Fetch data from the CoinGecko API and store it in MongoDB and cache it in Redis
     
             const data = await fetchStoreCacheData();
     
-            // If data was fetched successfully, store it in Redis with a 6-minute expiration
-            if (data && data.length > 0) {
-                await cacheDataInRedis(COIN_MARKET_KEY, data, 360);
-                console.log('Data successfully cached in Redis');
-            } else {
-                console.log('No data fetched from CoinGecko API');
-            }
+            // if (data && data.length > 0) {
+            //     console.log('Data successfully stored in MongoDB and cached in Redis');
+            // } else {
+            //     console.log('No data fetched from CoinGecko API');
+            // }
         } catch (error) {
             console.error('Error in cron job fetching and storing data:', error);
         }
