@@ -29,7 +29,7 @@ app.use(customMorganFormat);
 // Routes
 app.use('/api', router);
 
-// @route   GET http://localhost:3000/api
+// @route   GET http://localhost:3333/api
 
 // Check if the app is running in a test environment
 

@@ -48,11 +48,7 @@ router.get('/coins/markets/:ids', async (req, res) => {
         let coinsData = await getCryptoDataById(cachedKey, idsArr);
 
         if (!coinsData || coinsData.length === 0) {
-            console.log('Error retrieving data from Redis');
-
-            if (!coinsData || coinsData.length === 0) {
-                return res.status(404).json({ message: `No data found for the provided ids: ${ids}` });
-            }
+            return res.status(404).json({ message: `No data found for the provided ids: ${ids}` });
         }
 
         return res.status(200).json(coinsData);

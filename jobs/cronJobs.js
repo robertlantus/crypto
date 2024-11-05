@@ -3,7 +3,7 @@
 // Automate fetching every 5 minutes and store data in both Redis and MongoDB
 
 import cron from 'node-cron';
-import { fetchData } from '../services/fetchData.js';
+import { fetchStoreCacheData } from '../services/fetchStoreCacheData.js';
 import { cacheDataInRedis } from '../services/redisService.js';
 
 // Environment variables
@@ -24,7 +24,7 @@ export const cronJob = () => {
             // Fetch data from the CoinGecko API and store it in MongoDB
             // fetchData also stores data in MongoDB by calling storeCryptoData
     
-            const data = await fetchData();
+            const data = await fetchStoreCacheData();
     
             // If data was fetched successfully, store it in Redis with a 6-minute expiration
             if (data && data.length > 0) {

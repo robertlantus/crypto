@@ -2,36 +2,61 @@
 // mongoService.js
 
 // Import the Mongoose model
+import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
 import Crypto from '../models/crypto.js';   // export default
+import { cacheDataInRedis } from './redisService.js';
 // import { Crypto } from '../models/crypto.js';
 
-// Function to store data in MongoDB
+// Function to store or update data in MongoDB
+
+// Replace the bulk upsert with a more specific findOnedAndUpdate
 
 export const storeCryptoData = async (data) => {
     try {
-        // Insert or update each entry in MongoDB
+        // Loop through each coin in the data array
+        for (const coin of data) {
+            await Crypto.findOneAndUpdate(
+                { id: coin.id },     // Filter by CoinGecko ID
+                { $set: coin },      // Update the document with the new data
+                { upsert: true, new: true }     // Insert if not found, return the modified document
+            );
+        }
 
-        const operations = data.map((coin) => ({
-            updateOne: {
-                filter: { id: coin.id },    // Use the CoinGecko `id` as the unique identifier
-                update: { $set: coin },     // Update the document if it exists, or insert if not
-                upsert: true,               // Create a new document if it doesn’t exist
-            },
-        }));
-
-        // Perform a bulk operation to insert or update all documents at once
-
-        const result = await Crypto.bulkWrite(operations);
-        // console.log(`Data successfully stored in MongoDB: ${result.upsertedCount} new entries, ${result.modifiedCount} updated`);
-
-        // console.log(result);
-        return result;
+        console.log('Data successfully stored/updated in MongoDB');
 
     } catch (error) {
         console.error('Error storing data in MongoDB:', error);
         throw error;
     }
-};
+}
+
+// Bulk write (for larger datasets)
+
+// export const storeCryptoData = async (data) => {
+//     try {
+//         // Insert or update each entry in MongoDB
+
+//         const operations = data.map((coin) => ({
+//             updateOne: {
+//                 filter: { id: coin.id },    // Use the CoinGecko `id` as the unique identifier
+//                 update: { $set: coin },     // Update the document if it exists, or insert if not
+//                 upsert: true,               // Create a new document if it doesn’t exist
+//             },
+//         }));
+
+//         // Perform a bulk operation to insert or update all documents at once
+
+//         const result = await Crypto.bulkWrite(operations);
+//         // console.log(`Data successfully stored in MongoDB: ${result.upsertedCount} new entries, ${result.modifiedCount} updated`);
+
+//         // console.log(result);
+//         return result;
+
+//     } catch (error) {
+//         console.error('Error storing data in MongoDB:', error);
+//         throw error;
+//     }
+// };
 
 // Function to retrieve all crypto data from MongoDB
 

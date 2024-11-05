@@ -12,6 +12,7 @@ export const cacheDataInRedis = async (key, data, expiration = 360) => {
         await redisClient.set(key, JSON.stringify(data));
         await redisClient.expire(key, expiration);
         // console.log(`${key} cached successfully.`);
+        console.log('Data successfully cached in Redis');
 
     } catch (error) {
         console.error(`Error caching ${key} in Redis:`, error);
@@ -21,7 +22,7 @@ export const cacheDataInRedis = async (key, data, expiration = 360) => {
 // Function to retrieve cached data from Redis by key, with fallback to MongoDB if not found
 
 export const getAllCryptoData = async (key) => {
-
+   
     try {
         // Attempt to retrieve data from Redis
         const cachedData = await redisClient.get(key);

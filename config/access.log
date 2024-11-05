@@ -56,3 +56,16 @@ GET /api/coins/markets 200 5.275 ms
 GET /api/coins/markets/monero 200 2.034 ms
 GET /api/coins/markets/moner 404 2.089 ms
 GET /api/coins/markets/monero 200 1.740 ms
+GET /api/coins/markets 200 42.472 ms
+GET /api/coins/markets 200 2.698 ms
+GET /api/coins/markets/monero 200 1.969 ms
+GET /api/coins/markets 200 5.432 ms
+GET /api/coins/markets/monero 200 2.203 ms
+GET /api/coins/markets/monero 200 4.471 ms
+GET /api/coins/markets/moner 404 1.714 ms
+GET /api/coins/markets/monero 200 1.726 ms
+GET /api/coins/markets/monero 200 5.520 ms
+GET /api/coins/markets/monero 200 7.684 ms
+GET /api/coins/markets 200 6.730 ms
+GET /api/coins/markets 200 2.627 ms
+GET /api/coins/markets/monero 200 2.415 ms
