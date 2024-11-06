@@ -2,9 +2,7 @@
 // mongoService.js
 
 // Import the Mongoose model
-import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
 import Crypto from '../models/crypto.js';   // export default
-import { cacheDataInRedis } from './redisService.js';
 // import { Crypto } from '../models/crypto.js';
 
 // Function to store or update data in MongoDB

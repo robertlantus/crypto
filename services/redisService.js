@@ -28,7 +28,7 @@ export const getAllCryptoData = async (key) => {
         const cachedData = await redisClient.get(key);
 
         if (cachedData) {
-            console.log('Data fetched from Redis cache');
+            console.log('All coins data fetched from Redis cache');
             return JSON.parse(cachedData);
         }
         
@@ -62,7 +62,7 @@ export const getCryptoDataById = async (key, ids) => {
         const cachedData = await redisClient.get(key);
 
         if (cachedData) {
-            console.log(`Data fetched from Redis cache for: ${ids}`);
+            console.log(`Coin data fetched from Redis cache for: ${ids}`);
             const allData = JSON.parse(cachedData);
             return allData.filter(coin => ids.includes(coin.id));
         }

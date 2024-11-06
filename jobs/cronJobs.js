@@ -4,7 +4,6 @@
 
 import cron from 'node-cron';
 import { fetchStoreCacheData } from '../services/fetchStoreCacheData.js';
-import { cacheDataInRedis } from '../services/redisService.js';
 
 // Environment variables
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '*/5 * * * *'; 

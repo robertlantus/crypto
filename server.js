@@ -8,6 +8,12 @@ import router from './routes/routes.js';
 import { connectDB } from './config/mongoConfig.js';
 import { cronJob } from './jobs/cronJobs.js';
 import customMorganFormat from './config/morgan.mjs';
+import 'dotenv/config';
+// import dotenv from 'dotenv';
+
+// Load .env configuration
+// dotenv.config();
+// dotenv.config({ path: '.env' });
 
 const PORT = process.env.PORT || 3333;
 
@@ -33,10 +39,11 @@ app.use('/api', router);
 
 // Check if the app is running in a test environment
 
-if (process.env.NODE_ENV !== 'test') {
-    // Start the Express server only if not in test mode
-    const server = app.listen(PORT, () => {
-        console.log(`Server running on port: ${PORT}`);
-    });
-}
+// if (process.env.NODE_ENV !== 'test') {
+//     // Start the Express server only if not in test mode
+//     const server = app.listen(PORT, () => {
+//         console.log(`Server running on port: ${PORT}`);
+//     });
+// }
 
+app.listen(PORT, console.log(`Server running on port: ${PORT}`));
