@@ -5,10 +5,12 @@
 import express from 'express';
 import { startApp } from './services/startApp.js';
 import router from './routes/routes.js';
+import auth from './routes/auth.js';
 import { connectDB } from './config/mongoConfig.js';
 import { cronJob } from './jobs/cronJobs.js';
 import customMorganFormat from './config/morgan.mjs';
 import 'dotenv/config';
+
 // import dotenv from 'dotenv';
 
 // Load .env configuration
@@ -34,6 +36,9 @@ app.use(customMorganFormat);
 
 // Routes
 app.use('/api', router);
+
+// Use the routes defined in auth.js
+app.use('/api/auth', auth);
 
 // @route   GET http://localhost:3333/api
 
