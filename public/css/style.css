@@ -1,0 +1,110 @@
+
+/* body {
+    background-color: gray;
+} */
+
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html {
+    /* border: 2px solid orange; */
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grid Mobile Portrait */
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    /* padding-block: 1rem; */
+}
+
+header {
+    /* border: 2px solid black; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem;
+}
+
+.logo {
+    /* font-family: 'Inter', sans-serif; */
+    font-family: monospace;
+    font-size: 16px;
+    color: green;
+    /* padding-inline: 1rem; */
+
+}
+
+.login-section {
+    /* border: 2px solid plum; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-inline: 1rem; */
+    /* padding-block: 1rem; */
+}
+
+.login, .signup {
+    padding: .5rem;
+}
+
+.table {
+    width: 100%;
+    font-size: 12px;
+}
+
+#coin-table {
+    /* border: 2px solid red; */
+    /* display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center; */
+    /* font-size: 12px; */
+}
+
+@media (min-width: 767px) {
+    
+    body {
+        padding-inline: 0.5rem;
+    }
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .table {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 1024px) {
+    
+    body {
+        padding-inline: 1rem;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .table {
+        font-size: 16px;
+    }
+}

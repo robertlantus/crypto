@@ -6,7 +6,7 @@ import cron from 'node-cron';
 import { fetchStoreCacheData } from '../services/fetchStoreCacheData.js';
 
 // Environment variables
-const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '*/5 * * * *'; 
+const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '*/55 * * * *'; 
 
 // Redis key for caching the crypto data
 export const COIN_MARKET_KEY = 'coins_markets';

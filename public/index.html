@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/script.js" defer></script>
+    <title>Homepage</title>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            gecko app
+        </div>
+        <div class="login-section">
+            <div class="login">
+                <a href="/api/login" class="button is-primary is-light is-responsive has-text-success is-outlined">
+                    <i class="fa-solid fa-user"></i>&nbsp;&nbsp;Login
+                </a>
+            </div>
+            <div class="signup">
+                <a href="/api/auth/signup" class="button is-primary is-light is-responsive has-text-success">
+                    <i class="fa-solid fa-user-plus"></i>&nbsp;&nbsp;Sign Up
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="table is-striped is-narrow is-hoverable">
+        <div id="coin-table"></div>
+    </div>
+
+    <!-- <script src="/js/script.js"></script> -->
+</body>
+</html>
