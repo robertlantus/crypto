@@ -2,10 +2,8 @@
 // routes.js
 
 import express from 'express';
-// import { getAllCryptoData } from '../services/mongoService.js';
 import { getAllCryptoData, getCryptoDataById } from '../services/redisService.js';
 import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
-// import { getCryptoDataById } from '../services/mongoService.js';
 
 const router = express.Router();
 

@@ -16,12 +16,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
 
-// import dotenv from 'dotenv';
-
-// Load .env configuration
-// dotenv.config();
-// dotenv.config({ path: '.env' });
-
 const PORT = process.env.PORT || 3333;
 
 const app = express();
@@ -48,17 +42,6 @@ const __dirname = path.dirname(__filename);
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.static('public'));
-
-// Routes
-
-// app.get('/api/index', (req, res) => {
-//     res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'));
-// });
-
-// app.get('/api/auth/signup', (req, res) => {
-//     res.status(200).sendFile(path.join(__dirname, 'public', 'signup.html'));
-// });
 
 // Use the routes defined in index.js
 app.use('/api', index);
@@ -71,14 +54,4 @@ app.use('/api', router);
 app.use('/api/auth', auth);
 
 // @route   GET http://localhost:3333/api
-
-// Check if the app is running in a test environment
-
-// if (process.env.NODE_ENV !== 'test') {
-//     // Start the Express server only if not in test mode
-//     const server = app.listen(PORT, () => {
-//         console.log(`Server running on port: ${PORT}`);
-//     });
-// }
-
 app.listen(PORT, console.log(`Server running on port: ${PORT}`));

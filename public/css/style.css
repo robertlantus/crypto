@@ -38,10 +38,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: .5rem;
+    padding: 2rem 1rem;
 }
 
-.logo {
+.logo a {
     /* font-family: 'Inter', sans-serif; */
     font-family: monospace;
     font-size: 16px;
@@ -68,13 +68,21 @@ header {
     font-size: 12px;
 }
 
+#error-message {
+    color: red;
+}
+
 @media (min-width: 767px) {
     
     body {
         padding-inline: 0.5rem;
     }
 
-    .logo {
+    header {
+        padding: 3rem 2rem;
+    }
+
+    .logo a {
         font-size: 20px;
     }
 
@@ -89,9 +97,8 @@ header {
         padding-inline: 1rem;
     }
 
-    .logo {
-        font-size: 24px;
-        font-weight: bold;
+    .logo a {
+        font-size: 32px;
     }
 
     .table {

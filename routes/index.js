@@ -1,5 +1,4 @@
 
-// Index Routes
 // index.js
 
 import express from 'express';
