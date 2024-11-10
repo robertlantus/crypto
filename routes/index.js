@@ -15,6 +15,10 @@ router.get('/index', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
+router.get('/login', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, '../public', 'login.html'));
+});
+
 router.get('/signup', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, '../public', 'signup.html'));
 });

@@ -1,5 +1,5 @@
 
-// signup.js
+// login.js
 
 const form = document.getElementById('loginForm');
 
@@ -11,7 +11,7 @@ form.addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value;            
 
     try {
-        const response = await fetch('/api/auth/signup', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -19,17 +19,19 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password })
         });
 
+        if (!response.ok) {
+            alert('Login failed');
+            throw new Error('Login failed');
+        } 
+
         const data = await response.json();
         // console.log(data);
+        alert('Login successfull');
+        window.location.href = '/index.html';
 
-        if (response.ok) {
-            alert('User registered successfully!');
-            // Redirect home page
-            window.location.href = '/index.html';
-        } else {
-            alert(`Error: ${data.error}`);
-        }
+        
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Login error:', error.message);
+        alert('Login failed: ' + error.message);
     }
 });

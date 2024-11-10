@@ -1,0 +1,41 @@
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+}
+
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input {
+    font-size: 14px;
+    width: 220px;
+}
+
+#bttn {
+    font-size: 15px;
+    width: 220px;
+}
+
+.please {
+    font-size: 16px;
+    margin: 1rem;
+}
+
+
+/* @media (min-width: 767px) {
+
+} */
