@@ -16,7 +16,7 @@ import 'dotenv/config';
 
 import router from './routes/routes.js';
 import auth from './routes/auth.js';
-import index from './routes/index.js';
+// import index from './routes/index.js';
 
 const PORT = process.env.PORT || 3333;
 
@@ -45,8 +45,8 @@ const __dirname = path.dirname(__filename);
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use the routes defined in index.js
-app.use('/api', index);
+// Use the routes defined in index.js --> Made Redundant by Static folder above
+// app.use('/api', index);
 
 // Use the routes defined in auth.js
 app.use('/api/auth', auth);

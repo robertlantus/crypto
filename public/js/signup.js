@@ -23,13 +23,20 @@ form.addEventListener('submit', async (e) => {
         // console.log(data);
 
         if (response.ok) {
+
+            // Save token and user data in localStorage
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
             alert('User registered successfully!');
-            // Redirect home page
-            window.location.href = '/index.html';
+            window.location.href = '/client.html';       // Redirect to client page
         } else {
-            alert(`Error: ${data.error}`);
+            console.error(`Login failed: ${data.error}`);
+            alert(`Login failed: ${data.error}`);
         }
+        
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Login error:', error.message);
+        alert('Login failed: ' + error.message);
     }
 });

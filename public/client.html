@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/client.js" defer></script>
+    <script src="/js/script.js" defer></script>
+    <title>Homepage - Dashboard</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/index.html">gecko app</a> 
+        </div>
+        <div>
+            <button id="logout" class="button is-inverted is-responsive">
+                <i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Logout
+            </button>
+        </div>
+    </header>
+    <main>
+        <section>
+            <div id="userDisplay"></div>
+            <article id="watchlistArticle">
+                <p>Your watchlists</p>
+                <ul id="watchlist">
+
+                </ul>
+            </article>
+        </section>
+        <section class="allcoins">
+            <div id="error-message"></div>
+            <div class="table is-striped is-narrow is-hoverable">
+                <div id="coin-table"></div>
+            </div>
+        </section>
+    </main>
+</body>

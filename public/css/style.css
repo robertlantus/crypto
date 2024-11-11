@@ -63,6 +63,10 @@ header {
     padding: .5rem;
 }
 
+.allcoins {
+    margin-top: 3rem;
+}
+
 .table {
     width: 100%;
     font-size: 12px;

@@ -19,19 +19,24 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password })
         });
 
-        if (!response.ok) {
-            alert('Login failed');
-            throw new Error('Login failed');
-        } 
-
         const data = await response.json();
-        // console.log(data);
-        alert('Login successfull');
-        window.location.href = '/index.html';
 
-        
+        if (response.ok) {
+            
+            // Save token and user data in localStorage
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+
+            // console.log(data);
+            alert('Login successfull');
+            window.location.href = '/client.html';
+        } else {
+            console.error(`Login failed: ${data.error}`);
+            alert(`Login failed: ${data.error}`);
+        }
+
     } catch (error) {
-        console.error('Login error:', error.message);
-        alert('Login failed: ' + error.message);
+        console.error(`Login error: ${error.message}`);
+        alert(`Login failed: ${error.message}`);
     }
 });
