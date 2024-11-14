@@ -32,7 +32,7 @@ form.addEventListener('submit', async (e) => {
             
 
             // console.log(data);
-            alert('Login successful');
+            // alert('Login successful');
             // window.location.href = '/client.html';
             window.location.replace('/client.html');
         } else {

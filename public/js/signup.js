@@ -31,7 +31,7 @@ form.addEventListener('submit', async (e) => {
             localStorage.setItem('user', JSON.stringify(data.user));
             
 
-            alert('User registered successfully!');
+            // alert('User registered successfully!');
             // Redirect to client page
             // window.location.href = '/client.html';       
             window.location.replace('/client.html');

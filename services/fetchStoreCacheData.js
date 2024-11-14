@@ -29,7 +29,7 @@ export const fetchStoreCacheData = async () => {
 
         // Cache data in Redis at start to keep in sync with MongoDB
         
-        await cacheDataInRedis(COIN_MARKET_KEY, data, 360);
+        await cacheDataInRedis(COIN_MARKET_KEY, data, 360); // in cronJobs.js we have: COIN_MARKET_KEY = 'coins_markets'
 
         // console.log(result);
         // console.log(data);

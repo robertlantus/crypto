@@ -3,8 +3,11 @@
 
 import { initializeApp } from 'firebase/app';
 
+const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY;
+
 const firebaseConfig = {
-    apiKey: "AIzaSyAW2OUDdohg-gsystLbLlwe17Mb6T51mXc",
+    // apiKey: "AIzaSyAW2OUDdohg-gsystLbLlwe17Mb6T51mXc",
+    apiKey: FIREBASE_API_KEY,
     authDomain: "gecko-users.firebaseapp.com",
     projectId: "gecko-users",
     storageBucket: "gecko-users.firebasestorage.app",

@@ -57,4 +57,3 @@ app.use('/api', router);
 // @route   GET http://localhost:3333/api
 app.listen(PORT, console.log(`Server running on port: ${PORT}`));
 
-// To do:
