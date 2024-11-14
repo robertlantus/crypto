@@ -18,18 +18,23 @@ form.addEventListener('submit', async (e) => {
             },
             body: JSON.stringify({ email, password })
         });
-
+        // console.log(response);
         const data = await response.json();
-
+        // console.log(data);
         if (response.ok) {
+            // console.log(data.token);
             
             // Save token and user data in localStorage
+
+            // localStorage.setItem('message', data.message);
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+            
 
             // console.log(data);
-            alert('Login successfull');
-            window.location.href = '/client.html';
+            alert('Login successful');
+            // window.location.href = '/client.html';
+            window.location.replace('/client.html');
         } else {
             console.error(`Login failed: ${data.error}`);
             alert(`Login failed: ${data.error}`);

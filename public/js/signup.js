@@ -25,16 +25,21 @@ form.addEventListener('submit', async (e) => {
         if (response.ok) {
 
             // Save token and user data in localStorage
+
+            // localStorage.setItem('message', data.message);
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+            
 
             alert('User registered successfully!');
-            window.location.href = '/client.html';       // Redirect to client page
+            // Redirect to client page
+            // window.location.href = '/client.html';       
+            window.location.replace('/client.html');
         } else {
             console.error(`Login failed: ${data.error}`);
             alert(`Login failed: ${data.error}`);
         }
-        
+
     } catch (error) {
         console.error('Login error:', error.message);
         alert('Login failed: ' + error.message);

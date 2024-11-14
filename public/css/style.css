@@ -5,6 +5,7 @@
 
 @import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
 
 * {
     -webkit-box-sizing: border-box;
@@ -63,6 +64,30 @@ header {
     padding: .5rem;
 }
 
+.welcome {
+    /* border: 2px solid red; */
+    /* font-family: 'Nunito', sans-serif; */
+    /* color: #000; */
+    /* padding: 2rem 2rem; */
+}
+
+#userDisplay {
+    /* border: 2px solid red; */
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    padding-bottom: 1rem;
+}
+
+#watchlistArticle {
+    /* border: 2px solid red; */
+    /* padding-block: 1rem; */
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .allcoins {
     margin-top: 3rem;
 }
@@ -72,7 +97,7 @@ header {
     font-size: 12px;
 }
 
-#error-message {
+#status-message {
     color: red;
 }
 

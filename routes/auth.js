@@ -33,7 +33,7 @@ router.post('/signup', async (req, res) => {
         const user = userCredential.user;
 
         // Generate JWT
-        const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '12h' });
+        const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '1h' });     
         
         res.status(201).json({ 
                             message: 'User registered successfully', 
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
         const user = userCredential.user;
 
         // Generate JWT
-        const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '12h' });
+        const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '60s' });
 
         res.status(200).json({ 
                             message: 'Login successful', 

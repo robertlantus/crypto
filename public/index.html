@@ -30,10 +30,31 @@
     </header>
 
     <main>
-        <div id="error-message"></div>
-        <div class="table is-striped is-narrow is-hoverable">
-            <div id="coin-table"></div>
-        </div>
+        <section class="allcoins">
+            <div id="status-message"></div>
+
+            <!-- Second -->
+            <table class="table is-striped is-narrow is-hoverable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Coin</th>
+                        <th>Price (USD)</th>
+                        <th>24h</th>
+                        <th>24h Volume</th>
+                        <th>Market Cap</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+
+            <!-- First -->
+            <!-- <div class="table is-striped is-narrow is-hoverable">
+                <div id="coin-table"></div>
+            </div> -->
+        </section>
     </main>
 
 

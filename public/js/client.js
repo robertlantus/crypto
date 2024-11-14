@@ -10,13 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const authToken = localStorage.getItem('authToken');
     
-
     if (authToken) {
         // Decode token to display user details
         const user = JSON.parse(localStorage.getItem('user'));
 
         userDisplay.textContent = `Welcome ${user.email}`;   
-        watchlistArticle.style.display = 'block'; 
+        watchlistArticle.style.display = 'flex'; 
     } else {
         userDisplay.textContent = 'Please log in to access your watchlist';
         logoutButton.style.display = 'none';
@@ -27,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function logout() {
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
-        window.location.href = '/index.html';
+        // window.location.href = '/index.html';
+        window.location.replace('/index.html');
     }
 
     logoutButton.addEventListener('click', logout);

@@ -22,20 +22,48 @@
         </div>
     </header>
     <main>
-        <section>
-            <div id="userDisplay"></div>
-            <article id="watchlistArticle">
-                <p>Your watchlists</p>
-                <ul id="watchlist">
-
-                </ul>
-            </article>
-        </section>
-        <section class="allcoins">
-            <div id="error-message"></div>
-            <div class="table is-striped is-narrow is-hoverable">
-                <div id="coin-table"></div>
+        <div class="card">
+            <div class="card-content">
+                <section class="welcome">
+                    <div id="userDisplay"></div>
+                    <article id="watchlistArticle" class="watchlistArticle">
+                        <div>
+                            <p>Your watchlists:</p>
+                            <ul id="watchlist"></ul>
+                        </div>
+                        <div>
+                            <button id="create" class="button is-info is-hoverable is-responsive">
+                                <i class="fa-solid fa-square-plus"></i>&nbsp;&nbsp;Create new watchlist
+                            </button>
+                        </div>
+                    </article>
+                </section>
             </div>
+        </div>
+
+        <section class="allcoins">
+            <div id="status-message"></div>
+            <!-- Second -->
+            <table class="table is-striped is-narrow is-hoverable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Coin</th>
+                        <th>Price (USD)</th>
+                        <th>24h</th>
+                        <th>24h Volume</th>
+                        <th>Market Cap</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+
+            <!-- First -->
+            <!-- <div class="table is-striped is-narrow is-hoverable">
+                <div id="coin-table"></div>
+            </div> -->
         </section>
     </main>
 </body>
