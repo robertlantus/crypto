@@ -3651,3 +3651,9 @@ GET /api/coins/markets 304 3.052 ms
 GET /api/coins/markets 304 2.771 ms
 GET /api/coins/markets 200 2.531 ms
 GET /api/coins/markets 304 2.643 ms
+GET /api/coins/markets 304 3.136 ms
+GET /api/coins/markets 304 2.128 ms
+GET /api/coins/markets 200 34.656 ms
+GET /api/coins/markets 304 1.822 ms
+GET /api/coins/markets 304 3.023 ms
+GET /api/coins/markets 304 24.774 ms
