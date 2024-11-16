@@ -35,6 +35,9 @@ main {
     margin: 1rem;
 }
 
+#errorMessageContainer {
+    white-space: pre-line;
+}
 
 /* @media (min-width: 767px) {
 

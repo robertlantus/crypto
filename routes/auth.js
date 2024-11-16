@@ -21,8 +21,6 @@ router.post('/signup', async (req, res) => {
         const { email, password } = req.body;
         const auth = getAuth(firebaseApp);      // Get an instance of the auth object
 
-        // console.log(auth);
-
         if (!email || !password) {
             return res.status(400).json({ error: 'Email and password are required.' });
         }
@@ -38,12 +36,39 @@ router.post('/signup', async (req, res) => {
         res.status(201).json({ 
                             message: 'User registered successfully', 
                             token,
-                            user: { 
-                                uid: user.uid, 
-                                email: user.email 
-                            } });
+                            // user: { 
+                            //     uid: user.uid, 
+                            //     email: user.email 
+                            // } 
+                            });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+
+        // console.log(error);
+        // console.log(error.message);
+        // console.log(error.code);
+
+        let errorMessage = 'An error occurred during signup.';
+
+        // Handle specific Firebase error cases
+
+        switch (error.code) {
+            case ('auth/invalid-email'):
+                errorMessage = `The email address is not valid.
+                                Please enter a correct email.`;
+                break;
+            case ('auth/weak-password'):
+                errorMessage = `The password provided is too weak. 
+                                Please use a stronger password.`;
+                break;
+            case ('auth/email-already-in-use'):
+                errorMessage = `This email is already in use. 
+                                Please use a different email or log in.`;
+                break;
+            default: console.error('Unexpected signup error:', error);
+        }
+
+        res.status(400).json({ error: errorMessage });
+        // res.status(400).json({ error: error.message });
     }
 });
 
@@ -66,18 +91,36 @@ router.post('/login', async (req, res) => {
         const user = userCredential.user;
 
         // Generate JWT
-        const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '60s' });
+        const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
 
         res.status(200).json({ 
                             message: 'Login successful', 
                             token,
-                            user: {
-                                uid: user.uid, 
-                                email: user.email 
-                            } });  
+                            // user: {
+                            //     uid: user.uid, 
+                            //     email: user.email 
+                            // } 
+                        });  
     } catch (error) {
-        res.status(400).json({ error: error.message });
+
+        let errorMessage = 'An error occurred during login.';
+
+        // Handle specific Firebase error cases
+
+        switch (error.code) {
+            case ('auth/invalid-credential'):
+                errorMessage = `Invalid credential. 
+                                Please try again.`;
+                break;
+            case ('auth/too-many-requests'):
+                errorMessage = `Too many failed login attempts. 
+                                Please try again later.`;
+                break;
+            default: console.error('Unexpected login error:', error);
+        }
+
+        res.status(400).json({ error: errorMessage });
     }
-})
+});
 
 export default router;

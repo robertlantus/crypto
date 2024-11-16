@@ -1,6 +1,11 @@
 
 // script.js
 
+// Clear localStorage on page load
+window.addEventListener('load', () => {
+    localStorage.removeItem('successMessage');
+});
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // Initial fetch of coin data

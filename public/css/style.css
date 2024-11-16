@@ -64,11 +64,10 @@ header {
     padding: .5rem;
 }
 
-.welcome {
-    /* border: 2px solid red; */
-    /* font-family: 'Nunito', sans-serif; */
-    /* color: #000; */
-    /* padding: 2rem 2rem; */
+#messageContainer {
+    display: none;
+    color: green;
+    padding-bottom: 1rem;
 }
 
 #userDisplay {
