@@ -31,12 +31,12 @@ router.get('/coins/markets', async (req, res) => {
     }
 });
 
-// Route to get coins by id(s) from /coins/markets/id(s) 
-// GET http://localhost:3333/api/coins/markets/bitcoin,ethereum --> OK
+// Route to get coins by id(s) from /coins/markets/query?ids=bitcoin,ethereum,solana 
+// GET http://localhost:3333/api/coins/markets/?ids=bitcoin,ethereum,solana --> OK
 
-router.get('/coins/markets/:ids', async (req, res) => {
+router.get('/coins/markets/query', async (req, res) => {
 
-    const { ids } = req.params;
+    const { ids } = req.query;
     const idsArr = ids.split(',');
 
     try {
@@ -56,5 +56,31 @@ router.get('/coins/markets/:ids', async (req, res) => {
         res.status(500).json({ message: 'Error retrieving market data', error });
     }
 });
+
+// Route to get coins by id(s) from /coins/markets/id(s) 
+// GET http://localhost:3333/api/coins/markets/bitcoin,ethereum --> OK
+
+// router.get('/coins/markets/:ids', async (req, res) => {
+
+//     const { ids } = req.params;
+//     const idsArr = ids.split(',');
+
+//     try {
+//         const cachedKey = COIN_MARKET_KEY;
+
+//         // Attempt to fetch data from Redis
+//         let coinsData = await getCryptoDataById(cachedKey, idsArr);
+
+//         if (!coinsData || coinsData.length === 0) {
+//             return res.status(404).json({ message: `No data found for the provided ids: ${ids}` });
+//         }
+
+//         return res.status(200).json(coinsData);
+        
+//     } catch (error) {
+//         console.error('Error retrieving data by ids from Redis or MongoDB:', error);
+//         res.status(500).json({ message: 'Error retrieving market data', error });
+//     }
+// });
 
 export default router;
