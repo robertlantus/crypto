@@ -2,7 +2,7 @@
   "name": "gecko",
   "version": "1.0.0",
   "description": "personal project",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "server.js",

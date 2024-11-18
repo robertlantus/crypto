@@ -5,6 +5,7 @@ import express from 'express';
 import { getAllCryptoData, getCryptoDataById } from '../services/redisService.js';
 import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
 
+// Get an instance of router
 const router = express.Router();
 
 // Route to get all cached coins from /coins/markets 
