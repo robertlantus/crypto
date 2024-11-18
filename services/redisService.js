@@ -63,8 +63,11 @@ export const getCryptoDataById = async (key, ids) => {
 
         if (cachedData) {
             console.log(`Coin data fetched from Redis cache for: ${ids}`);
-            const allData = JSON.parse(cachedData);
-            return allData.filter(coin => ids.includes(coin.id));
+            const bulkData = JSON.parse(cachedData);
+
+            // Filter the data for the requested coin IDs
+            const filteredById = bulkData.filter(coin => ids.includes(coin.id));
+            return filteredById;
         }
 
         // If data is not found in Redis, fetch from MongoDB

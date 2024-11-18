@@ -3,7 +3,8 @@
 
 import express from 'express';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import firebaseApp from '../config/firebaseConfig.js' 
+import firebaseApp from '../config/firebaseConfig.js';
+import { handleErrorResponse } from '../utils/errorHandling.js'; 
 
 import jwt from 'jsonwebtoken';
 
@@ -68,7 +69,6 @@ router.post('/signup', async (req, res) => {
         }
 
         res.status(400).json({ error: errorMessage });
-        // res.status(400).json({ error: error.message });
     }
 });
 
