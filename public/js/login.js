@@ -26,11 +26,12 @@ form.addEventListener('submit', async (e) => {
         });
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         if (response.ok) {
             
             const token = data.token;
+            // console.log(token);
 
             // Save token and user data in localStorage
             localStorage.setItem('authToken', token);
@@ -48,8 +49,8 @@ form.addEventListener('submit', async (e) => {
             // window.location.href = '/client.html';
             window.location.replace('/client.html');
         } else {
-            // Handle different status codes for more specific errors
 
+            // Handle different status codes for more specific errors
             let userMessage = `Login failed: 
                                 ${data.error}`;
 
@@ -57,6 +58,12 @@ form.addEventListener('submit', async (e) => {
 
             console.error(`Login failed (status ${response.status}): ${data.error}`);
             displayErrorMessage(userMessage);
+
+            // if (response.status === 403) {
+            //     setTimeout(() => {
+            //         window.location.replace('/forbidden.html');
+            //     }, 3000);
+            // }
         }
     } catch (error) {
         // console.error('Login error:', error);
