@@ -104,6 +104,12 @@ header {
     margin: 1rem;
 }
 
+/* Modal styles */
+
+/* .modal-card-foot * {
+    margin-right: 8px;
+} */
+
 @media (min-width: 767px) {
     
     body {

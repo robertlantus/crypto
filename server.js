@@ -16,6 +16,7 @@ import 'dotenv/config';
 
 import router from './routes/routes.js';
 import auth from './routes/auth.js';
+import watchlists from './routes/watchlists.js';
 // import index from './routes/index.js';
 
 const PORT = process.env.PORT || 3333;
@@ -53,6 +54,9 @@ app.use('/api/auth', auth);
 
 // Use the routes defined in routes.js
 app.use('/api', router);
+
+// Use the routes defined in watchlists.js
+app.use('/api/watchlists', watchlists);
 
 // @route   GET http://localhost:3333/api
 app.listen(PORT, console.log(`Server running on port: ${PORT}`));

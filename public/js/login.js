@@ -48,6 +48,7 @@ form.addEventListener('submit', async (e) => {
             // alert('Login successful');
             // window.location.href = '/client.html';
             window.location.replace('/client.html');
+
         } else {
 
             // Handle different status codes for more specific errors
@@ -59,11 +60,11 @@ form.addEventListener('submit', async (e) => {
             console.error(`Login failed (status ${response.status}): ${data.error}`);
             displayErrorMessage(userMessage);
 
-            // if (response.status === 403) {
-            //     setTimeout(() => {
-            //         window.location.replace('/forbidden.html');
-            //     }, 3000);
-            // }
+            if (response.status === 403) {
+                setTimeout(() => {
+                    window.location.replace('/forbidden.html');
+                }, 3000);
+            }
         }
     } catch (error) {
         // console.error('Login error:', error);

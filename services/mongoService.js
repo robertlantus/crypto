@@ -2,7 +2,7 @@
 // mongoService.js
 
 // Import the Mongoose model
-import Crypto from '../models/crypto.js';   // export default
+import Crypto from '../models/cryptoModel.js';   // export default
 // import { Crypto } from '../models/crypto.js';
 
 // Function to store or update data in MongoDB

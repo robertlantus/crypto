@@ -51,6 +51,7 @@ form.addEventListener('submit', async (e) => {
             // Redirect to client page
             // window.location.href = '/client.html';       
             window.location.replace('/client.html');
+            
         } else {
 
             // console.error(`Login failed: ${data.error}`);
