@@ -15,28 +15,28 @@ export const handleErrorResponse = (res, statusCode, message, error = null) => {
 
 // Used in auth.js
 
-export const sendSignupErrorResponse = (res, code, message, addAuthHeaders = true) => {
+// export const sendSignupErrorResponse = (res, code, message, addAuthHeaders = true) => {
 
-    const response = res.status(code);
+//     const response = res.status(code);
 
-    if (addAuthHeaders) {
+//     if (addAuthHeaders) {
 
-        response.append('WWW-Authenticate', 'Bearer');
-        response.append('Location', 'http://localhost:3333/signup.html');
-    }
+//         response.append('WWW-Authenticate', 'Bearer');
+//         response.append('Location', 'http://localhost:3333/signup.html');
+//     }
 
-    return response.json({ error: message });
-};
+//     return response.json({ error: message });
+// };
 
-export const sendLoginErrorResponse = (res, code, message, addAuthHeaders = false) => {
+// export const sendLoginErrorResponse = (res, code, message, addAuthHeaders = false) => {
 
-    const response = res.status(code);
+//     const response = res.status(code);
 
-    if (addAuthHeaders) {
+//     if (addAuthHeaders) {
 
-        response.append('WWW-Authenticate', 'Bearer');
-        response.append('Location', 'http://localhost:3333/login.html');
-    }
+//         response.append('WWW-Authenticate', 'Bearer');
+//         response.append('Location', 'http://localhost:3333/login.html');
+//     }
 
-    return response.json({ error: message });
-};
+//     return response.json({ error: message });
+// };

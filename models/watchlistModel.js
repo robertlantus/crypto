@@ -1,5 +1,5 @@
 
-// watchlist.js
+// watchlistModel.js
 
 import mongoose from "mongoose";
 

@@ -14,7 +14,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
 
-import router from './routes/routes.js';
+import markets from './routes/markets.js';
 import auth from './routes/auth.js';
 import watchlists from './routes/watchlists.js';
 // import index from './routes/index.js';
@@ -46,17 +46,14 @@ const __dirname = path.dirname(__filename);
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use the routes defined in index.js --> Made Redundant by Static folder above
-// app.use('/api', index);
+// Use the routes defined in markets.js
+app.use('/api', markets);
 
 // Use the routes defined in auth.js
 app.use('/api/auth', auth);
 
-// Use the routes defined in routes.js
-app.use('/api', router);
-
 // Use the routes defined in watchlists.js
-app.use('/api/watchlists', watchlists);
+app.use('/api', watchlists);
 
 // @route   GET http://localhost:3333/api
 app.listen(PORT, console.log(`Server running on port: ${PORT}`));
