@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/login.css">
-    <script src="/js/signup.js" defer></script>
+    <script src="./js/signup.js" defer></script>
     <title>Sign Up</title>
 </head>
 <body>
@@ -22,7 +22,13 @@
         </div>
         <div class="card">
             <div class="card-content">
-                <form id="loginForm">
+                <form id="signupForm">
+                    <div class="field">
+                        <div class="control">
+                            <label for="username"></label>
+                            <input class="input" type="text" id="username" name="username" placeholder="Enter your username" required>
+                        </div>
+                    </div>
                     <div class="field">
                         <div class="control">
                             <label for="email"></label>

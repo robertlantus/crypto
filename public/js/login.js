@@ -13,7 +13,7 @@ form.addEventListener('submit', async (e) => {
 
     e.preventDefault();
 
-    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;            
 
     try {
@@ -22,7 +22,7 @@ form.addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username, password })
         });
 
         const data = await response.json();
@@ -38,10 +38,10 @@ form.addEventListener('submit', async (e) => {
 
             // Decode the token to extract the email
             const payload = JSON.parse(atob(token.split('.')[1]));
-            const userEmail = payload.email;
+            const userName = payload.username;
 
             // Store the decoded email in localStorage
-            localStorage.setItem('userEmail', userEmail);
+            localStorage.setItem('userName', userName);
 
             localStorage.setItem('successMessage', 'Login successful!');
 
@@ -60,11 +60,11 @@ form.addEventListener('submit', async (e) => {
             console.error(`Login failed (status ${response.status}): ${data.error}`);
             displayErrorMessage(userMessage);
 
-            if (response.status === 403) {
-                setTimeout(() => {
-                    window.location.replace('/forbidden.html');
-                }, 3000);
-            }
+            // if (response.status === 403) {
+            //     setTimeout(() => {
+            //         window.location.replace('/forbidden.html');
+            //     }, 3000);
+            // }
         }
     } catch (error) {
         // console.error('Login error:', error);

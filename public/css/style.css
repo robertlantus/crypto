@@ -64,6 +64,17 @@ header {
     padding: .5rem;
 }
 
+.head {
+    /* border: 2px solid red; */
+    display: flex;
+    justify-content: space-between;
+}
+
+.card {
+    /* border: 2px solid plum; */
+    flex-basis: 50%;
+}
+
 #messageContainer {
     display: none;
     color: green;
@@ -85,6 +96,11 @@ header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.bold {
+    font-weight: 600;
+    padding-bottom: 8px;
 }
 
 .allcoins {

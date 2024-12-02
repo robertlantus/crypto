@@ -8,6 +8,24 @@ import verifyToken from '../middleware/verifyToken.js';
 
 const router = express.Router();
 
+// Retrieve watchlists for the authenticated user
+// GET /api/watchlists 
+
+router.get('/watchlists', verifyToken, async (req, res) => {
+    try {
+        // Get the user ID from the authenticated user
+        const userId = req.user._id;
+
+        // Find watchlists for the user
+        const watchlists = await Watchlist.find({ userId });
+
+        res.status(200).json(watchlists);
+    } catch (error) {
+        console.error('Error fetching watchlists:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
 // Create new watchlist
 // POST /api/watchlists 
 

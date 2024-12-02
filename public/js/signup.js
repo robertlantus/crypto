@@ -6,15 +6,18 @@ window.addEventListener('load', () => {
     localStorage.removeItem('successMessage');
 });
 
-const form = document.getElementById('loginForm');
+const form = document.getElementById('signupForm');
 const errorMessageContainer = document.getElementById('errorMessageContainer');
 
 form.addEventListener('submit', async (e) => {
 
     e.preventDefault();
 
+    const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;            
+    const password = document.getElementById('password').value;      
+    
+    console.log(username, email, password);
 
     try {
         const response = await fetch('/api/auth/signup', {
@@ -22,10 +25,10 @@ form.addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username, email, password })
         });
 
-        // console.log(response);
+        console.log(response);
 
         const data = await response.json();
         // console.log(data);
@@ -33,16 +36,19 @@ form.addEventListener('submit', async (e) => {
         if (response.ok) {
             
             const token = data.token;
+            // console.log(token);
 
             // Save token and user data in localStorage
             localStorage.setItem('authToken', token);
 
             // Decode the token to extract the email
             const payload = JSON.parse(atob(token.split('.')[1]));
-            const userEmail = payload.email;
+            // console.log(payload);
+            const userName = payload.username;
+            // console.log(userName);
 
-            // Store the decoded email in localStorage
-            localStorage.setItem('userEmail', userEmail);
+            // Store the decoded username in localStorage
+            localStorage.setItem('userName', userName);
             
             localStorage.setItem('successMessage', 'User registered successfully!');
             

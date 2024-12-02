@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // const user = JSON.parse(localStorage.getItem('user'));
 
         // Get user email from localStorage
-        const userEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
 
-        userDisplay.textContent = `Welcome ${userEmail}`;   
+        userDisplay.textContent = `Welcome ${userName} !`;   
         watchlistArticle.style.display = 'flex'; 
 
     } else {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Log out function
     function logout() {
         localStorage.removeItem('authToken');
-        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userName');
         localStorage.removeItem('successMessage');
         // window.location.href = '/index.html';
         window.location.replace('/index.html');
@@ -121,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Watchlist created:', result);
             alert(`Watchlist ${watchlistName} created successfully!`);
 
+            // const watchlist = document.getElementById('watchlist');
+            // let li = document.createElement('li');
+            // li.innerText = `${watchlistName}`;
+            // watchlist.append(li);
+
         } catch (error) {
             console.error('Error creating watchlist', error);
             alert('Failed to create watchlist. Please try again.')
@@ -132,3 +137,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchWatchlists();
+});
+
+async function fetchWatchlists() {
+    
+    const watchlistContainer = document.getElementById('watchlistContainer');
+
+    // Retrieve the token from localStorage
+    const authToken = localStorage.getItem('authToken');
+
+    if (!authToken) {
+        watchlistContainer.innerHTML = 'You need to log in to view your watchlists';
+        window.location.replace('/login.html');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/watchlists', {
+            method: 'GET',
+            headers: {
+                // Include the token in the Authorization header
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const watchlists = await response.json();
+
+            if (watchlists.length === 0) {
+                watchlistContainer.innerHTML = 'You do not have any watchlists';
+                return;
+            }
+
+            // Render watchlists dynamically
+            watchlistContainer.innerHTML = '';
+            const list = document.createElement('ul');
+            watchlists.forEach(watchlist => {
+                const li = document.createElement('li');
+                li.innerText = `${watchlist.name}`;
+                list.appendChild(li);
+                watchlistContainer.appendChild(list);
+            });
+        } else {
+            const errorData = await response.json();
+            console.error('Failed to fetch watchlists:', errorData.message);
+            watchlistContainer.innerHTML = `<p>Error: ${errorData.message}</p>`;
+        }
+        
+    } catch (error) {
+        console.error('Error fetching watchlists:', error);
+        watchlistContainer.innerHTML = '<p>An error occurred. Please try again later.</p>';
+    }
+}

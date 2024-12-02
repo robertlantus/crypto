@@ -17,55 +17,59 @@
         </div>
         <div>
             <button id="logout" class="button is-inverted is-responsive">
-                <i class="fa-solid fa-user-xmark"></i>&nbsp;&nbsp;Logout
+                <i class="fa-solid fa-user-xmark"></i><span class="pl-2">Logout</span>
             </button>
         </div>
     </header>
     <main>
-        <div class="card">
-            <div class="card-content">
-                <section>
-                    <div id="messageContainer"></div>
-                    <div id="userDisplay"></div>
-                    <article id="watchlistArticle">
-                        <div>
-                            <p>Your watchlists:</p>
-                            <ul id="watchlist"></ul>
-                        </div>
-
-                        <!-- Create Watchlist Section -->
-
-                        <div>
-                            <button id="create" class="button is-info is-hoverable is-responsive">
-                                <i class="fa-solid fa-square-plus"></i><span class="pl-2">Create new watchlist</span>
-                            </button>
-                        </div>
-
-                        <!-- Modal for Naming Watchlist -->
-
-                        <div id="watchlistModal" class="modal">
-                            <div class="modal-background"></div>
-                            <div class="modal-card">
-                                <header class="modal-card-head">
-                                    <p class="modal-card-title">Create watchlist</p>
-                                    <button class="delete" aria-label="close" id="closeModal"></button>
-                                </header>
-                                <section class="modal-card-body">
-                                    <div class="field">
-                                        <label class="label">Watchlist Name</label>
-                                        <div class="control">
-                                            <input type="text" id="watchlistName" class="input" placeholder="Enter watchlist name:">
-                                        </div>
-                                    </div>
-                                </section>
-                                <footer class="modal-card-foot is-spaced">
-                                    <button id="saveWatchlist" class="button is-success mr-2">Save</button>
-                                    <button id="cancelWatchlist" class="button">Cancel</button>
-                                </footer>
+        <div class="head">
+            <div class="card">
+                <div class="card-content">
+                    <section>
+                        <div id="messageContainer"></div>
+                        <div id="userDisplay"></div>
+                        <article id="watchlistArticle">
+                            <div>
+                                <p class="bold">Your watchlists:</p>
+                                <div id="watchlistContainer">
+                                    <!-- Watchlists will be dynamically inserted here -->
+                                </div>
                             </div>
+                        </article>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Create Watchlist Section -->
+
+            <div>
+                <button id="create" class="button is-info is-hoverable is-responsive">
+                    <i class="fa-solid fa-square-plus"></i><span class="pl-2">Create new watchlist</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal for Naming Watchlist -->
+
+        <div id="watchlistModal" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Create watchlist</p>
+                    <button class="delete" aria-label="close" id="closeModal"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Watchlist Name</label>
+                        <div class="control">
+                            <input type="text" id="watchlistName" class="input" placeholder="Enter watchlist name:">
                         </div>
-                    </article>
+                    </div>
                 </section>
+                <footer class="modal-card-foot is-spaced">
+                    <button id="saveWatchlist" class="button is-success mr-2">Save</button>
+                    <button id="cancelWatchlist" class="button">Cancel</button>
+                </footer>
             </div>
         </div>
 
