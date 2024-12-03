@@ -120,6 +120,31 @@ header {
     margin: 1rem;
 }
 
+/* Delete Watchlist */
+
+/* Hide delete icon by default */
+.delete-icon {
+    display: none;
+    cursor: pointer;
+    color: #f87171;
+    margin-left: 10px;
+    font-size: 1.2rem;
+}
+
+/* Show delete icon when hovering over the watchlist item */
+.watchlist-item:hover .delete-icon {
+    display: inline-block;
+}
+
+/* Style for the watchlist items */
+.watchlist-item {
+    display: flex;
+    align-items: center;
+    padding-inline: 10px;
+    margin-bottom: 6px;
+}
+
+
 /* Modal styles */
 
 /* .modal-card-foot * {

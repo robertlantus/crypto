@@ -55,4 +55,30 @@ router.post('/watchlists', verifyToken, async (req, res) => {
     }
 });
 
+// Remove watchlist by id
+// DELETE /api/watchlists/:id
+
+router.delete('/watchlists/:id', verifyToken, async (req, res) => {
+
+    const watchlistId = req.params.id;
+    console.log('Received ID:', watchlistId);
+    
+    // Get the user ID from the authenticated user
+    const userId = req.user._id;
+
+    try {
+        // Find and delete the watchlist owned by the user
+        const deletedWatchlist = await Watchlist.findOneAndDelete({ _id: watchlistId, userId });
+
+        if (!deletedWatchlist) {
+            return res.status(404).json({ message: 'Watchlist not found or not authorized to delete.' });
+        }
+
+        res.status(200).json({ message: 'Watchlist deleted successfully', watchlist: deletedWatchlist });
+    } catch (error) {
+        console.error('Error deleting watchlist:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
 export default router;
