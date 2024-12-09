@@ -1,7 +1,7 @@
 // verifyToken.js
 
 import jwt from 'jsonwebtoken';
-import { User } from '../models/userModel.js';
+import User from '../models/userModel.js';
 
 // Secret key for JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'BNdfp2DpDyiTFzGpJ9nQlzNrAj/yusBJS3kP52rH0/rM2xLpZrSiaNGFo3q9O74UIJ3P9p2YoFmmQ/m1l7kqrg==';

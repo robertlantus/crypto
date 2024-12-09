@@ -3,8 +3,8 @@
 
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/userModel.js';
-// import { sendSignupErrorResponse, sendLoginErrorResponse } from '../utils/errorHandling.js';
+import User from '../models/userModel.js';
+import { registerSchema, loginSchema } from '../config/validators.js';
 
 // Secret key for JWT
 const JWT_SECRET = process.env.JWT_SECRET || 'BNdfp2DpDyiTFzGpJ9nQlzNrAj/yusBJS3kP52rH0/rM2xLpZrSiaNGFo3q9O74UIJ3P9p2YoFmmQ/m1l7kqrg==';
@@ -18,13 +18,21 @@ router.post('/signup', async (req, res) => {
 
     const { username, email, password } = req.body;
 
-    // Check for missing credentials
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: 'Username, email and password are required.' });
+    // Validate input using the validators schemas (with Joi library)
+
+    const { error } = registerSchema.validate({ username, email, password });
+    // console.log(error);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
     }
 
     try {
-        const user = new User({ username, email, password });
+        const user = new User({ 
+                                username, 
+                                email, 
+                                password 
+                            });
+        // console.log(user);
         await user.save();
 
         // Generate JWT
@@ -33,14 +41,28 @@ router.post('/signup', async (req, res) => {
             { expiresIn: '1h' });  
 
         res.status(201).json({ 
-            message: `Successful signup for: ${username}`,
+            message: `New user signed up successfully as: ${username}`,
             token 
         });
         
     } catch (error) {
+        // console.log(error);
+        // console.log(error.keyValue);    // { username: 'cryptic1' }
+        // console.log(Object.keys(error.keyValue));   // [ 'username' ]
+        // console.log(Object.keys(error.keyValue)[0], typeof Object.keys(error.keyValue)[0]);   // username typeof string
+        // console.log(error.keyValue['username']);    // cryptic1
+
+        // Handle duplicate key error (E11000)
+        if (error.code === 11000) { 
+            const duplicateField = Object.keys(error.keyValue)[0];
+            return res.status(409).json({ 
+                message: `Duplicate value detected for ${duplicateField}: "${error.keyValue[duplicateField]}"`,
+            });
+        }
+
         console.error('Signup failed', error);
         res.status(500).json({ 
-            message: 'Signup failed', 
+            message: 'Internal server error', 
             error: error.message 
         });
     }
@@ -53,8 +75,12 @@ router.post('/login', async (req, res) => {
     
     const { username, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(401).json({ message: 'Username and password are required' });
+    // Validate input using the validators schemas (with Joi library)
+
+    const { error } = loginSchema.validate({ username, password });
+    // console.log(error);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
     }
 
     try {
@@ -65,9 +91,11 @@ router.post('/login', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Compare provided password with stored password
-        if (password !== user.password) {
-            return res.status(401).json({ message: 'Invalid password' });
+        // Compare provided password with stored encrypted password
+        const passwordMatch = await user.comparePassword(password);
+
+        if (!passwordMatch) {
+            return res.status(404).json({ message: 'Invalid password' });
         }
 
         // Generate JWT
@@ -76,275 +104,17 @@ router.post('/login', async (req, res) => {
             { expiresIn: '1h' });
 
         res.status(200).json({
-            message: `Logged in as: ${username}`,
+            message: `Successful login for user: ${username}`,
             token
         });
         
     } catch (error) {
         console.error('Login failed', error);
         res.status(500).json({ 
-            message: 'Login failed', 
+            message: 'Internal server error', 
             error: error.message 
         });
     }
 });
-
-// Refactored
-
-// router.post('/signup', async (req, res) => {
-
-//     const { email, password } = req.body;
-
-//     // Check for missing credentials
-//     if (!email || !password) {
-//         return sendSignupErrorResponse(res, 401, 'Email and password are required.', true);
-//     }
-
-//     try {
-//         // Get an instance of the auth object
-//         const auth = getAuth(firebaseApp);
-
-//         // Create a new user with Firebase
-//         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-//         const user = userCredential.user;
-
-//         // Generate JWT
-//         const token = jwt.sign({ uid: user.uid, email: user.email }, 
-//                                 JWT_SECRET, 
-//                                 { expiresIn: '1h' });  
-
-//         // Successful user signup
-//         res.status(201).json({ 
-//                                 message: 'User registered successfully', 
-//                                 token
-//                             });
-
-//     } catch (error) {
-
-//         // Default to Unauthorized
-//         let code = 401;
-//         let errorMessage = 'An error occurred during signup.';
-
-//         // Handle Firebase-specific errors
-//         switch (error.code) {
-//             case ('auth/invalid-email'):
-//                 errorMessage = `The email address is not valid.
-//                                 Please enter a correct email.`;
-//                 break;
-//             case ('auth/weak-password'):
-//                 code = 406;     // Not Acceptable
-//                 errorMessage = `The password provided is too weak. 
-//                                 Please use a stronger password.`;
-//                 break;
-//             case ('auth/email-already-in-use'):
-//                 code = 409;     // Conflict
-//                 errorMessage = `This email is already in use. 
-//                                 Please use a different email or log in.`;
-//                 break;
-//             default: console.error('Unexpected signup error:', error);
-//         }
-
-//         // Send appropriate error response
-//         return sendSignupErrorResponse(res, code, errorMessage, code);
-//     }
-// });
-
-// Route handler login
-// Make a POST from login.html
-// POST http://localhost:3333/api/auth/login
-
-// router.post('/login', async (req, res) => {
-
-//     const { email, password } = req.body;
-
-//     // Check for missing credentials
-//     if (!email || !password) {
-//         return sendLoginErrorResponse(res, 401, 'Email and password are required.', true);
-//     }
-
-//     try {
-//         // Get an instance of the auth object
-//         const auth = getAuth(firebaseApp);
-
-//         // Sign in an existing user with Firebase
-//         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-//         const user = userCredential.user;
-
-//         // Generate JWT
-//         const token = jwt.sign({ uid: user.uid, email: user.email }, 
-//                                 JWT_SECRET, 
-//                                 { expiresIn: '1h' });
-        
-//         // Successful login response
-//         res.status(200).json({ 
-//                                 message: 'Login successful', 
-//                                 token
-//                             });  
-
-//     } catch (error) {
-
-//         // console.log(error);     // FirebaseError: Firebase: Error (auth/invalid-credential)
-//         // console.log(error.code);    // auth/invalid-credential
-
-//         // Default to Unauthorized
-//         let code = 401;
-//         let errorMessage = 'An error occurred during login.';
-
-//         // Handle Firebase-specific errors
-//         switch (error.code) {
-//             case ('auth/invalid-credential'):
-//                 errorMessage = `Invalid credential. 
-//                                 Please try again.`;
-//                 break;
-//             case ('auth/too-many-requests'):
-//                 code = 403;     // Forbidden
-//                 errorMessage = `Too many failed login attempts. 
-//                                 Please try again later.`;
-//                 break;
-//             default: console.error('Unexpected login error:', error);
-//         }
-
-//         // Send appropriate error response
-//         return sendLoginErrorResponse(res, code, errorMessage, code === 401);
-//     }
-// });
-
-// Original
-
-// router.post('/signup', async (req, res) => {
-    // try {
-        // const { email, password } = req.body;
-        // const auth = getAuth(firebaseApp);      // Get an instance of the auth object
-
-        // if (!email || !password) {
-            // return res.status(400).json({ error: 'Email and password are required.' });
-        // }
-
-        // // Create a new user with Firebase
-
-        // const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        // const user = userCredential.user;
-
-        // // Generate JWT
-        // const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '1h' });     
-        
-        // res.status(201).json({ 
-        //                     message: 'User registered successfully', 
-        //                     token,
-        //                     // user: { 
-        //                     //     uid: user.uid, 
-        //                     //     email: user.email 
-        //                     // } 
-        //                     });
-    // } catch (error) {
-
-        // console.log(error);
-        // console.log(error.message);
-        // console.log(error.code);
-
-        // let errorMessage = 'An error occurred during signup.';
-
-        // Handle specific Firebase error cases
-
-        // switch (error.code) {
-        //     case ('auth/invalid-email'):
-        //         errorMessage = `The email address is not valid.
-        //                         Please enter a correct email.`;
-        //         break;
-        //     case ('auth/weak-password'):
-        //         errorMessage = `The password provided is too weak. 
-        //                         Please use a stronger password.`;
-        //         break;
-        //     case ('auth/email-already-in-use'):
-        //         errorMessage = `This email is already in use. 
-        //                         Please use a different email or log in.`;
-        //         break;
-        //     default: console.error('Unexpected signup error:', error);
-        // }
-
-        // res.status(400).json({ error: errorMessage });
-    // }
-// });
-
-// Route handler login
-// Make a POST from login.html
-// POST http://localhost:3333/api/auth/login
-
-// Refactored With Alex
-
-// router.post('/login', async (req, res) => {
-
-//     let code = 401;
-    
-//     try {
-//         const { email, password } = req.body;
-
-//         // Get an instance of the auth object
-//         const auth = getAuth(firebaseApp);      
-
-//         if (!email || !password) {
-
-//             // res.status(code);
-//             // res.append('WWW-Authenticate', 'Bearer');
-//             // res.append('Location', 'http://localhost:3333/login.html');
-//             // return res.json({ error: 'Email and password are required.' });
-
-//             return res.status(code)
-//                       .append('WWW-Authenticate', 'Bearer')
-//                       .append('Location', 'http://localhost:3333/login.html')
-//                       .json({ error: 'Email and password are required.' });
-//         }
-
-//         // Sign in an existing user with Firebase
-
-//         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-//         const user = userCredential.user;
-
-//         // Generate JWT
-//         const token = jwt.sign({ uid: user.uid, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
-
-//         res.status(200).json({ 
-//                             message: 'Login successful', 
-//                             token,
-//                             // user: {
-//                             //     uid: user.uid, 
-//                             //     email: user.email 
-//                             // } 
-//                         });  
-//     } catch (error) {
-
-//         // console.log(error);     // FirebaseError: Firebase: Error (auth/invalid-credential)
-//         // console.log(error.code);    // auth/invalid-credential
-
-//         let errorMessage = 'An error occurred during login.';
-
-//         // Handle specific Firebase error cases
-
-//         switch (error.code) {
-//             case ('auth/invalid-credential'):
-//                 errorMessage = `Invalid credential. 
-//                                 Please try again.`;
-//                 break;
-//             case ('auth/too-many-requests'):
-//                 code = 403;
-//                 errorMessage = `Too many failed login attempts. 
-//                                 Please try again later.`;
-//                 break;
-//             default: console.error('Unexpected login error:', error);
-//         }
-
-//         res.status(code);
-
-//         if (code === 401) {
-//             // res.status(code).append({'WWW-Authenticate': 'Bearer',
-//             //                         'Location': 'http://localhost:3333/login.html'
-//             // });
-//             res.append('WWW-Authenticate', 'Bearer');
-//             res.append('Location', 'http://localhost:3333/login.html');
-//         }
-
-//         return res.json({ error: errorMessage });
-//     }
-// });
 
 export default router;
