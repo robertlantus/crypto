@@ -17,7 +17,6 @@ import 'dotenv/config';
 import markets from './routes/markets.js';
 import auth from './routes/auth.js';
 import watchlists from './routes/watchlists.js';
-// import index from './routes/index.js';
 
 const PORT = process.env.PORT || 3333;
 

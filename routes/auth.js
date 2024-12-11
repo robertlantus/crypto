@@ -37,8 +37,8 @@ router.post('/signup', async (req, res) => {
 
         // Generate JWT
         const token = jwt.sign({ userId: user._id, username: user.username }, 
-            JWT_SECRET, 
-            { expiresIn: '1h' });  
+                                JWT_SECRET, 
+                                { expiresIn: '1h' });  
 
         res.status(201).json({ 
             message: `New user signed up successfully as: ${username}`,
@@ -56,7 +56,7 @@ router.post('/signup', async (req, res) => {
         if (error.code === 11000) { 
             const duplicateField = Object.keys(error.keyValue)[0];
             return res.status(409).json({ 
-                message: `Duplicate value detected for ${duplicateField}: "${error.keyValue[duplicateField]}"`,
+                message: `Duplicate value detected for ${duplicateField}: ${error.keyValue[duplicateField]}`,
             });
         }
 
@@ -100,8 +100,8 @@ router.post('/login', async (req, res) => {
 
         // Generate JWT
         const token = jwt.sign({ userId: user._id, username: user.username }, 
-            JWT_SECRET, 
-            { expiresIn: '1h' });
+                                JWT_SECRET, 
+                                { expiresIn: '1h' });
 
         res.status(200).json({
             message: `Successful login for user: ${username}`,
