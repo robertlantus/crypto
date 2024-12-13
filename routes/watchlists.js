@@ -19,6 +19,10 @@ router.get('/watchlists', verifyToken, async (req, res) => {
         // Find watchlists for the user
         const watchlists = await Watchlist.find({ userId });
 
+        if (!watchlists || watchlists.length === 0) {
+            return res.status(404).json({ message: 'No watchlist found for this user' });
+        }
+
         res.status(200).json(watchlists);
 
     } catch (error) {
@@ -75,7 +79,7 @@ router.post('/watchlists', verifyToken, async (req, res) => {
 router.delete('/watchlists/:id', verifyToken, async (req, res) => {
 
     const watchlistId = req.params.id;
-    console.log('Received ID:', watchlistId);
+    // console.log('Received ID:', watchlistId);
 
     // Get the user ID from the authenticated user
     const userId = req.user._id;
@@ -95,6 +99,39 @@ router.delete('/watchlists/:id', verifyToken, async (req, res) => {
 
     } catch (error) {
         console.error('Error deleting watchlist:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
+// Patch watchlist name by id and user id
+// PATCH /api/watchlists/:id
+
+router.patch('/watchlists/:id', verifyToken, async (req, res) => {
+
+    const watchlistId = req.params.id;
+    const { name } = req.body;
+    // Get the user ID from the authenticated user
+    const userId = req.user._id;
+
+    try {
+        // Find and update the watchlist name owned by the user
+        const updatedWatchlist = await Watchlist.findOneAndUpdate(
+                                                        { _id: watchlistId, userId },   // Match by watchlist ID and user ID
+                                                        { name },                       // Update the name field
+                                                        { new: true }                   // Return the updated document
+                                                    );
+
+        if (!updatedWatchlist) {
+            return res.status(404).json({ message: 'Watchlist not found or not authorized to update' });
+        }
+
+        res.status(200).json({
+            message: 'Watchlist name updated successfully',
+            watchlist: updatedWatchlist
+        });
+
+    } catch (error) {
+        console.error('Error updating watchlist name:', error);
         res.status(500).json({ message: 'Internal server error.' });
     }
 });

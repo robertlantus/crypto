@@ -32,7 +32,7 @@ startApp();
 cronJob();
 
 // JSON parsing middleware
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));    // Limit JSON size to 10kb
 app.use(express.urlencoded({ extended: true }));
 
 // Use custom Morgan middleware for logging HTTP requests

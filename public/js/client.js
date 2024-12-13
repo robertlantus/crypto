@@ -187,7 +187,7 @@ const handleSaveWatchlist = async () => {
 
         // Await the resolved JSON response
         const result = await response.json();
-        console.log('Backend response:', result);
+        // console.log('Backend response:', result);
 
         // Use the `name` property of the `watchlist` object from the backend response
         displayMessage(`Watchlist "${result.watchlist.name}" created successfully!`);
@@ -241,6 +241,11 @@ document.getElementById('watchlistContainer').addEventListener('click', async (e
         // Remove the watchlist from the DOM
         watchlistItem.remove();
         alert('Watchlist deleted successfully!');
+
+        // Use the `name` property of the `watchlist` object from the backend response
+        displayMessage(`Watchlist "${result.watchlist.name}" deleted successfully!`);
+        // fetchWatchlists();
+
     } catch (error) {
         console.error('Error deleting watchlist:', error);
         alert('Could not delete the watchlist. Please try again.');
