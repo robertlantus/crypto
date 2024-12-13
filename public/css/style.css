@@ -144,6 +144,10 @@ header {
     margin-bottom: 6px;
 }
 
+img {
+    width: 18px;
+    height: 18px;
+}
 
 /* Modal styles */
 
@@ -168,6 +172,11 @@ header {
     .table {
         font-size: 14px;
     }
+
+    img {
+        width: 22px;
+        height: 22px;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -182,5 +191,10 @@ header {
 
     .table {
         font-size: 16px;
+    }
+
+    img {
+        width: 26px;
+        height: 26px;
     }
 }

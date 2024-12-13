@@ -29,6 +29,7 @@ async function fetchCoinsMarkets() {
         }
 
         const data = await response.json();
+        // console.log(data);
         renderTable(data);
     } catch (error) {
         console.error('Error fetching coin data:', error);
@@ -50,6 +51,7 @@ function renderTable(coins) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${coin.market_cap_rank}</td>
+            <td><img src="${coin.image}" alt="${coin.name} image"></td>
             <td>${coin.name} ${coin.symbol.toUpperCase()}</td>
             <td>$${coin.current_price.toFixed(2)}</td>
             <td>${coin.price_change_percentage_24h.toFixed(2)}%</td>

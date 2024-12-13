@@ -240,7 +240,6 @@ document.getElementById('watchlistContainer').addEventListener('click', async (e
 
         // Remove the watchlist from the DOM
         watchlistItem.remove();
-        alert('Watchlist deleted successfully!');
 
         // Use the `name` property of the `watchlist` object from the backend response
         displayMessage(`Watchlist "${result.watchlist.name}" deleted successfully!`);
