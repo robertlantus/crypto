@@ -88,14 +88,14 @@ router.post('/login', async (req, res) => {
 
         // Check if the user exists
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(401).json({ message: 'Username or password missmatch' });
         }
 
         // Compare provided password with stored encrypted password
         const passwordMatch = await user.comparePassword(password);
 
         if (!passwordMatch) {
-            return res.status(404).json({ message: 'Invalid password' });
+            return res.status(401).json({ message: 'Username or password missmatch' });
         }
 
         // Generate JWT
