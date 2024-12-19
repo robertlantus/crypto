@@ -46,18 +46,18 @@ const __dirname = path.dirname(__filename);
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use the routes defined in markets.js
+// markets endpoints
 app.use('/api', markets);
 
-// Use the routes defined in auth.js
+// authentication endpoints
 app.use('/api/auth', auth);
 
-// Use the routes defined in watchlists.js
+// watchlists endpoints
 app.use('/api', watchlists);
 
-// Use the routes defined in addCoins.js
+// add-coins endpoints
 app.use('/api', addCoins);
 
 // @route   GET http://localhost:3333/api
-app.listen(PORT, console.log(`Server running on port: ${PORT}`));
+app.listen(PORT, () => console.log(`👂 Server listening on port: ${PORT}`));
 

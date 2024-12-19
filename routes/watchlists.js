@@ -5,7 +5,6 @@
 import express from 'express';
 import Watchlist from '../models/watchlistModel.js';
 import verifyToken from '../middleware/verifyToken.js';
-import { getCryptoDataById } from '../services/redisService.js';
 
 const router = express.Router();
 
