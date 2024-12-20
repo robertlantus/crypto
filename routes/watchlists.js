@@ -11,7 +11,7 @@ const router = express.Router();
 // Retrieve watchlists for the authenticated user
 // GET /api/watchlists 
 
-router.get('/watchlists', verifyToken, async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         // Get the user ID from the authenticated user
         const userId = req.user._id;
@@ -34,7 +34,7 @@ router.get('/watchlists', verifyToken, async (req, res) => {
 // Create new watchlist
 // POST /api/watchlists 
 
-router.post('/watchlists', verifyToken, async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
 
     // Get name from frontend
     const { name } = req.body;
@@ -73,10 +73,10 @@ router.post('/watchlists', verifyToken, async (req, res) => {
     }
 });
 
-// Remove watchlist by id
+// Remove watchlist by watchlist id and user id
 // DELETE /api/watchlists/:id
 
-router.delete('/watchlists/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
 
     const watchlistId = req.params.id;
     // console.log('Received ID:', watchlistId);
@@ -103,10 +103,10 @@ router.delete('/watchlists/:id', verifyToken, async (req, res) => {
     }
 });
 
-// Patch watchlist name by id and user id
+// Patch watchlist name by watchlist id and user id
 // PATCH /api/watchlists/:id
 
-router.patch('/watchlists/:id', verifyToken, async (req, res) => {
+router.patch('/:id', verifyToken, async (req, res) => {
 
     const watchlistId = req.params.id;
     const { name } = req.body;

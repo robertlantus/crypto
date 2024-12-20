@@ -11,7 +11,7 @@ const router = express.Router();
 // Route to get all cached coins from /coins/markets 
 // GET http://localhost:3333/api/coins/markets --> OK
 
-router.get('/coins/markets', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
 
         const cachedKey = COIN_MARKET_KEY;
@@ -35,7 +35,7 @@ router.get('/coins/markets', async (req, res) => {
 // Route to get coins by id(s) from /coins/markets/query?ids=bitcoin,ethereum,solana 
 // GET http://localhost:3333/api/coins/markets/query?ids=bitcoin,ethereum,solana --> OK
 
-router.get('/coins/markets/query', async (req, res) => {
+router.get('/query', async (req, res) => {
 
     const { ids } = req.query;
     const idsArr = ids.split(',');

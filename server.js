@@ -17,7 +17,8 @@ import 'dotenv/config';
 import markets from './routes/markets.js';
 import auth from './routes/auth.js';
 import watchlists from './routes/watchlists.js';
-import addCoins from './routes/addCoins.js';
+import coins from './routes/coins.js';
+import handleRoot from './routes/handleRoot.js';
 
 const PORT = process.env.PORT || 3333;
 
@@ -47,17 +48,20 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // markets endpoints
-app.use('/api', markets);
+app.use('/api/coins/markets', markets);
 
 // authentication endpoints
 app.use('/api/auth', auth);
 
 // watchlists endpoints
-app.use('/api', watchlists);
+app.use('/api/watchlists', watchlists);
 
-// add-coins endpoints
-app.use('/api', addCoins);
+// coins operations endpoints
+app.use('/api/watchlists', coins);
 
-// @route   GET http://localhost:3333/api
+// handle root endpoint
+app.use('/api', handleRoot);
+
+// Start the server
 app.listen(PORT, () => console.log(`👂 Server listening on port: ${PORT}`));
 

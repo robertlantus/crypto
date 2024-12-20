@@ -11,9 +11,9 @@ import verifyToken from '../middleware/verifyToken.js';
 const router = express.Router();
 
 // Route to fetch coins by IDs and add them to a watchlist
-// PUT api/watchlists/675aa759ca531c3c0d5c22ae/add-coins?ids=bitcoin,solana,monero
+// PATCH /api/watchlists/675aa759ca531c3c0d5c22ae/add-coins?ids=bitcoin,solana,monero
 
-router.patch('/watchlists/:id/add-coins', verifyToken, async (req, res) => {
+router.patch('/:id/add-coins', verifyToken, async (req, res) => {
 
     // Get the watchlist ID
     const watchlistId = req.params.id;     
@@ -51,7 +51,7 @@ router.patch('/watchlists/:id/add-coins', verifyToken, async (req, res) => {
         // Add valid coins to the specified watchlist
 
         const updatedWatchlist = await Watchlist.findOneAndUpdate(
-                                                    { _id: watchlistId, userId },                                 // Match by watchlist ID and user ID
+                                                    { _id: watchlistId, userId },                            // Match by watchlist ID and user ID
                                                     { $addToSet: { coins: { $each: validCoinIds } } },       // Add unique coins
                                                     { new: true }                                            // Return the updated watchlist
         );
@@ -61,9 +61,9 @@ router.patch('/watchlists/:id/add-coins', verifyToken, async (req, res) => {
         }
 
         return res.status(200).json({
-                                    message: 'Coins added to the watchlist successfully',
+                                    message: 'Coin(s) added to the watchlist successfully',
                                     watchlist: updatedWatchlist
-        });
+                                });
         
     } catch (error) {
         console.error("Error adding coins to the watchlist:", error);
@@ -71,10 +71,56 @@ router.patch('/watchlists/:id/add-coins', verifyToken, async (req, res) => {
     }
 });
 
-// Retrieve watchlist for authenticated user with full coins details
+// Route to remove coins by their Ids from a watchlist 
+// PATCH/api/watchlists/{watchlist._id}/remove-coins/?ids=bitcoin,solana
+
+router.patch('/:id/remove-coins', verifyToken, async (req, res) => {
+
+    // Get the watchlist ID
+    // const { id } = req.params;
+    // const watchlistId = req.params.id;
+    const { id: watchlistId } = req.params;
+
+    // Get the user ID from the authenticated user
+    const userId = req.user._id;
+
+    // Coin IDs (comma-separeted)
+    const { ids } = req.query;  
+
+    if (!ids) {
+        return res.status(400).json({ message: "Please provide coin IDs in the query (ex: ?ids=bitcoin,ethereum)." });
+    }
+
+    try {
+        const idsArr = ids.split(',').map(coin => coin.trim());
+
+        // Update the watchlist by removing the specified coin IDs
+        const updatedWatchlist = await Watchlist.findOneAndUpdate(
+                                                    { _id: watchlistId, userId },               // Match by watchlist ID and user ID
+                                                    { $pull: { coins: { $in: idsArr } } },      // Remove the specified coin IDs
+                                                    { new: true }                               // Return the updated watchlist
+                                                );
+
+        if (!updatedWatchlist) {
+            return res.status(404).json({ message: "Watchlist not found." });
+        }
+    
+        return res.status(200).json({
+                                    message: 'Coin(s) removed from watchlist successfully',
+                                    watchlist: updatedWatchlist
+                                });
+    } catch (error) {
+        console.error("Error removing coins from the watchlist:", error);
+        res.status(500).json({ message: "Error removing coins from the watchlist", error });
+    }
+
+
+})
+
+// Retrieve watchlist by Id for authenticated user with full coins details
 // GET /api/watchlists/:id
 
-router.get('/watchlists/:id', verifyToken, async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
 
     // Get the watchlist ID
     // const { id } = req.params;
@@ -83,7 +129,7 @@ router.get('/watchlists/:id', verifyToken, async (req, res) => {
 
     // Get the user ID from the authenticated user
     const userId = req.user._id;
-    console.log(userId);
+    // console.log(userId);
 
     try {
         // Fetch the watchlist
