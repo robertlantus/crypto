@@ -1555,3 +1555,11 @@ PATCH /api/watchlists/675a988dca531c3c0d5c1ea0/remove-coins?ids=shiba-ino 200 7.
 GET /api/coins/markets 200 4.005 ms
 PATCH /api/watchlists/675a988dca531c3c0d5c1ea0/remove-coins?ids=tether 200 4.947 ms
 PATCH /api/watchlists/675a988dca531c3c0d5c1ea0/remove-coins?ids=shiba-inu 200 14.413 ms
+POST /api/auth/login 200 68.653 ms
+GET /api/watchlists/ 200 11.351 ms
+GET /api/coins/markets 200 4.929 ms
+PUT /api/watchlists 405 1.123 ms
+GET /api/coins/markets 200 5.246 ms
+PUT /api/watchlists 405 0.203 ms
+GET /api/watchlists 403 3.133 ms
+GET /api/watchlists 200 11.138 ms

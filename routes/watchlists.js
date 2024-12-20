@@ -73,6 +73,16 @@ router.post('/', verifyToken, async (req, res) => {
     }
 });
 
+// `PUT` is typically not used with collection resources(unless you want to replace the entire collection). 
+// which is why we'll treat this as an invalid route.
+
+router.put('/', async (req, res) => {
+    // set `Allow` header to indicate which HTTP methods are allowed for this resource
+    res.setHeader('Allow', 'GET, POST');
+    // return 405 Method Not Allowed
+    res.status(405).send();     
+})
+
 // Remove watchlist by watchlist id and user id
 // DELETE /api/watchlists/:id
 
