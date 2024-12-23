@@ -11,7 +11,7 @@ import verifyToken from '../middleware/verifyToken.js';
 const router = express.Router();
 
 // Route to fetch coins by IDs and add them to a watchlist
-// PATCH /api/watchlists/675aa759ca531c3c0d5c22ae/add-coins?ids=bitcoin,solana,monero
+// PATCH /api/watchlists/{675aa759ca531c3c0d5c22ae}/add-coins?ids=bitcoin,solana,monero
 
 router.patch('/:id/add-coins', verifyToken, async (req, res) => {
 
