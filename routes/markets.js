@@ -12,7 +12,7 @@ const router = express.Router();
 const BASE_URL = '/api/coins/markets';
 
 // Route to get all cached coins from /coins/markets 
-// GET http://localhost:3333/api/coins/markets --> OK
+// GET http://localhost:3333/api/coins/markets
 
 router.get('/', async (req, res) => {
     try {
@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
 });
 
 // Route to get coins by id(s) from /coins/markets/query
-// GET http://localhost:3333/api/coins/markets/query?ids=bitcoin,ethereum,solana --> OK
+// GET http://localhost:3333/api/coins/markets/query?ids=bitcoin,ethereum,solana
 
 router.get('/query', async (req, res) => {
 
@@ -98,11 +98,11 @@ router.get('/query', async (req, res) => {
             ]
         }
 
-        // return res.status(200).json(coinsData);
         return res.status(200).json(response);
         
     } catch (error) {
         console.error('Error retrieving data by ids from Redis or MongoDB:', error);
+
         res.status(500).json({ 
             message: 'Error retrieving market data', 
             error,
@@ -116,7 +116,7 @@ router.get('/query', async (req, res) => {
 });
 
 // Route to get coins by id(s) from /coins/markets/id(s) 
-// GET http://localhost:3333/api/coins/markets/bitcoin,ethereum --> OK
+// GET http://localhost:3333/api/coins/markets/bitcoin,ethereum
 
 router.get('/:ids', async (req, res) => {
 
