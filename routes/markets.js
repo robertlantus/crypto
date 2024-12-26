@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
         };
 
         // return res.status(200).json(coinsData);     
-        return res.status(200).json(response);     
+        res.status(200).json(response);     
 
     } catch (error) {
         console.error('Error retrieving market data from MongoDB:', error);
@@ -98,7 +98,7 @@ router.get('/query', async (req, res) => {
             ]
         }
 
-        return res.status(200).json(response);
+        res.status(200).json(response);
         
     } catch (error) {
         console.error('Error retrieving data by ids from Redis or MongoDB:', error);
@@ -158,7 +158,7 @@ router.get('/:ids', async (req, res) => {
             ]
         }
 
-        return res.status(200).json(response);
+        res.status(200).json(response);
         
     } catch (error) {
         console.error('Error retrieving data by ids from Redis or MongoDB:', error);

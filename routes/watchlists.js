@@ -5,8 +5,11 @@
 import express from 'express';
 import Watchlist from '../models/watchlistModel.js';
 import verifyToken from '../middleware/verifyToken.js';
+import mongoose from 'mongoose';
 
 const router = express.Router();
+
+const BASE_URL = '/api/watchlists';
 
 // Retrieve watchlists for the authenticated user
 // GET /api/watchlists 
@@ -20,14 +23,33 @@ router.get('/', verifyToken, async (req, res) => {
         const watchlists = await Watchlist.find({ userId });
 
         if (!watchlists || watchlists.length === 0) {
-            return res.status(404).json({ message: 'No watchlist found for this user' });
+            return res.status(404).json({ 
+                message: 'No watchlist found for this user',
+                links: [
+                    { rel: 'self', href: `${BASE_URL}`, method: 'GET' },
+                    { rel: 'create', href: `${BASE_URL}`, method: 'POST' }
+                ]
+            });
         }
 
-        res.status(200).json(watchlists);
+        res.status(200).json({
+            message: 'Watchlists retrieved successfully',
+            watchlists,
+            links: [
+                { rel: 'self', href: `${BASE_URL}`, method: 'GET' },
+                { rel: 'create', href: `${BASE_URL}`, method: 'POST' }
+            ]
+        });
 
     } catch (error) {
         console.error('Error fetching watchlists:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            links: [
+                { rel: 'self', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
     }
 });
 
@@ -40,7 +62,12 @@ router.post('/', verifyToken, async (req, res) => {
     const { name } = req.body;
 
     if (!name) {
-        return res.status(400).json({ message: 'Watchlist name is required' });
+        return res.status(400).json({ 
+            message: 'Watchlist name is required',
+            links: [
+                { rel: 'self', href: `${BASE_URL}`, method: 'POST' } 
+            ]
+        });
     }
 
     // Get the user ID from the authenticated user
@@ -52,7 +79,13 @@ router.post('/', verifyToken, async (req, res) => {
         const existingWatchlist = await Watchlist.findOne({ name, userId });
 
         if (existingWatchlist) {
-            return res.status(409).json({ message: `A watchlist with the name: ${name} already exists for this user` });
+            return res.status(409).json({ 
+                message: `A watchlist with the name: ${name} already exists for this user`,
+                links: [
+                    { rel: 'self', href: `${BASE_URL}`, method: 'POST' },
+                    { rel: 'get-all', href: `${BASE_URL}`, method: 'GET'}
+                ]
+            });
         }
 
         const newWatchlist = new Watchlist({ name, userId });
@@ -60,7 +93,11 @@ router.post('/', verifyToken, async (req, res) => {
         
         res.status(201).json({
             message: 'New watchlist successfully created',
-            watchlist: newWatchlist
+            watchlist: newWatchlist,
+            links: [
+                { rel: 'self', href: `${BASE_URL}`, method: 'POST' },
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET'}
+            ]
         });
 
     } catch (error) {
@@ -69,7 +106,13 @@ router.post('/', verifyToken, async (req, res) => {
         if (error.code === 11000) {
             return res.status(409).json({ message: `A watchlist with the name: ${name} already exists for this user` });
         }
-        res.status(500).json({ message: 'Internal server error.' });
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            links: [
+                { rel: 'self', href: `${BASE_URL}`, method: 'POST' } 
+            ]
+        });
     }
 });
 
@@ -80,7 +123,13 @@ router.put('/', async (req, res) => {
     // set `Allow` header to indicate which HTTP methods are allowed for this resource
     res.setHeader('Allow', 'GET, POST');
     // return 405 Method Not Allowed
-    res.status(405).send();     
+    res.status(405).json({
+        message: 'Method not allowed', 
+        links: [
+            { rel: 'get-all', href: `${BASE_URL}`, method: 'GET'},
+            { rel: 'create', href: `${BASE_URL}`, method: 'POST' },
+        ]
+    });     
 })
 
 // Remove watchlist by watchlist id and user id
@@ -94,55 +143,148 @@ router.delete('/:id', verifyToken, async (req, res) => {
     // Get the user ID from the authenticated user
     const userId = req.user._id;
 
+    if (!watchlistId) {
+        return res.status(400).json({
+            message: 'Please provide a valid watchlist ID',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        })
+    }
+
     try {
         // Find and delete the watchlist owned by the user
         const deletedWatchlist = await Watchlist.findOneAndDelete({ _id: watchlistId, userId });
 
         if (!deletedWatchlist) {
-            return res.status(404).json({ message: 'Watchlist not found or not authorized to delete.' });
+            return res.status(404).json({ 
+                message: 'Watchlist not found or not authorized to delete',
+                links: [
+                    { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' },
+                    { rel: 'create', href: `${BASE_URL}`, method: 'POST' }
+                ]
+            });
         }
 
         res.status(200).json({ 
             message: 'Watchlist deleted successfully', 
-            watchlist: deletedWatchlist 
+            watchlist: deletedWatchlist,
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' },
+                { rel: 'create', href: `${BASE_URL}`, method: 'POST' }
+            ] 
         });
 
     } catch (error) {
         console.error('Error deleting watchlist:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
     }
 });
 
 // Patch watchlist name by watchlist id and user id
 // PATCH /api/watchlists/:id
 
-router.patch('/:id', verifyToken, async (req, res) => {
+router.patch('/:id?', verifyToken, async (req, res) => {
 
     const watchlistId = req.params.id;
+    console.log(watchlistId);
     const { name } = req.body;
     // Get the user ID from the authenticated user
     const userId = req.user._id;
 
-    try {
-        // Find and update the watchlist name owned by the user
-        const updatedWatchlist = await Watchlist.findOneAndUpdate(
-                                                        { _id: watchlistId, userId },   // Match by watchlist ID and user ID
-                                                        { name },                       // Update the name field
-                                                        { new: true }                   // Return the updated document
-                                                    );
+    if (!watchlistId || watchlistId.trim() === '') {
+        return res.status(400).json({
+            message: 'Please provide a valid watchlist ID',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
+    }
 
-        if (!updatedWatchlist) {
-            return res.status(404).json({ message: 'Watchlist not found or not authorized to update' });
+    if (!mongoose.isValidObjectId(watchlistId)) {
+        return res.status(400).json({
+            message: 'Invalid watchlist ID format',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
+    }
+
+    if (!name) {
+        return res.status(400).json({
+            message: 'Watchlist name is required',
+            links: [
+                { rel: 'self', href: `${BASE_URL}/${watchlistId}`, method: 'PATCH' }
+            ]
+        });
+    }
+
+    try {
+        // Ensure the watchlist exists and belongs to the user
+        const watchlist = await Watchlist.findOne({ _id: watchlistId });
+
+        if (!watchlist) {
+            return res.status(404).json({
+                message: 'Watchlist not found',
+                links: [
+                    { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+                ]
+            });
         }
+
+        if (String(watchlist.userId) !== String(userId)) {
+            return res.status(403).json({
+                message: 'Not authorized to modify this watchlist',
+                links: [
+                    { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+                ]
+            });
+        }
+
+        watchlist.name = name;
+        await watchlist.save();
+
+        // // Find and update the watchlist name owned by the user
+        // const updatedWatchlist = await Watchlist.findOneAndUpdate(
+        //     { _id: watchlistId, userId },   // Match by watchlist ID and user ID
+        //     { name },                       // Update the name field
+        //     { new: true }                   // Return the updated document
+        // );
+
+        // if (!updatedWatchlist) {
+        //     return res.status(404).json({ 
+        //         message: 'Watchlist not found or not authorized to update',
+        //         links: [
+        //             { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' },
+        //             { rel: 'create', href: `${BASE_URL}`, method: 'POST' }
+        //         ] 
+        //     });
+        // }
 
         res.status(200).json({
             message: 'Watchlist name updated successfully',
-            watchlist: updatedWatchlist
+            watchlist,
+            links: [
+                { rel: 'self', href: `${BASE_URL}/${watchlistId}`, method: 'PATCH' },
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
         });
 
     } catch (error) {
         console.error('Error updating watchlist name:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ] 
+        });
     }
 });
 

@@ -36,10 +36,10 @@ router.post('/signup', async (req, res) => {
 
     try {
         const user = new User({ 
-                                username, 
-                                email, 
-                                password 
-                            });
+            username, 
+            email, 
+            password 
+        });
         // console.log(user);
         await user.save();
 
@@ -48,7 +48,7 @@ router.post('/signup', async (req, res) => {
         //                         JWT_SECRET, 
         //                         { expiresIn: '1h' });  
 
-        return res.status(201).json({ 
+        res.status(201).json({ 
             success: true,
             message: `New user signed up successfully as: ${username}`,
             links: [
@@ -78,7 +78,7 @@ router.post('/signup', async (req, res) => {
 
         console.error('Signup failed', error);
 
-        return res.status(500).json({ 
+        res.status(500).json({ 
             message: 'Internal server error', 
             error: error.message,
             links: [
@@ -138,21 +138,20 @@ router.post('/login', async (req, res) => {
                                 JWT_SECRET, 
                                 { expiresIn: '1h' });
 
-        return res.status(200).json({
+        res.status(200).json({
             message: `Successful login for user: ${username}`,
             token,
             expiredIn: '1h',
             links: [
                 { rel: 'self', href: `${BASE_URL}/login`, method: 'POST' },
-                { rel: 'signup', href: `${BASE_URL}/signup`, method: 'POST' },
-                { rel: 'logout', href: `${BASE_URL}/logout`, method: 'POST' }
+                { rel: 'signup', href: `${BASE_URL}/signup`, method: 'POST' }
             ]
         });
         
     } catch (error) {
         console.error('Login failed', { username, error });
 
-        return res.status(500).json({ 
+        res.status(500).json({ 
             message: 'Internal server error', 
             error: error.message,
             links: [
