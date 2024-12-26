@@ -1712,3 +1712,14 @@ PATCH /api/watchlists/676d5aea7cfee3076fffbcd 400 18.166 ms
 PATCH /api/watchlists/ 400 2.752 ms
 PATCH /api/watchlists/bvmnvnvmn 400 3.293 ms
 PATCH /api/watchlists/676d5aea7cfee3076fffbcdd 200 17.926 ms
+DELETE /api/watchlists 404 2.346 ms
+DELETE /api/watchlists 404 0.528 ms
+POST /api/auth/login 200 68.268 ms
+DELETE /api/watchlists 404 0.329 ms
+DELETE /api/watchlists 400 8.512 ms
+DELETE /api/watchlists/uiyiuy 404 2.262 ms
+GET /api/watchlists 401 2.499 ms
+GET /api/watchlists 200 7.379 ms
+DELETE /api/watchlists/676d5aea7cfee3076fffbcdd 200 4.304 ms
+GET /api/watchlists 200 3.776 ms
+PATCH /api/watchlists/676d5aea7cfee3076fffbcdd 401 0.850 ms

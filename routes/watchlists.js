@@ -135,7 +135,7 @@ router.put('/', async (req, res) => {
 // Remove watchlist by watchlist id and user id
 // DELETE /api/watchlists/:id
 
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id?', verifyToken, async (req, res) => {
 
     const watchlistId = req.params.id;
     // console.log('Received ID:', watchlistId);
@@ -143,13 +143,22 @@ router.delete('/:id', verifyToken, async (req, res) => {
     // Get the user ID from the authenticated user
     const userId = req.user._id;
 
-    if (!watchlistId) {
+    if (!watchlistId || watchlistId.trim() === '') {
         return res.status(400).json({
             message: 'Please provide a valid watchlist ID',
             links: [
                 { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
             ]
-        })
+        });
+    }
+
+    if (!mongoose.isValidObjectId(watchlistId)) {
+        return res.status(404).json({
+            message: 'Invalid watchlist ID format',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
     }
 
     try {
@@ -193,7 +202,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 router.patch('/:id?', verifyToken, async (req, res) => {
 
     const watchlistId = req.params.id;
-    console.log(watchlistId);
+    // console.log(watchlistId);
     const { name } = req.body;
     // Get the user ID from the authenticated user
     const userId = req.user._id;
