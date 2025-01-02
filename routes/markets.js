@@ -158,6 +158,8 @@ router.get('/:ids', async (req, res) => {
             ]
         }
 
+        console.log(`Received request with ids: ${ids}`);
+
         res.status(200).json(response);
         
     } catch (error) {

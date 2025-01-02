@@ -3,6 +3,12 @@
 
 import axios from "../axiosConfig.js";
 
+// Fetch all market data
 export const fetchMarketData = () => {
     return axios.get('/api/coins/markets');
-}
+};
+
+// Fetch data for a specific coin by ID
+export const fetchCoinData = (id) => {
+    return axios.get(`/api/coins/markets/${id}`);
+};

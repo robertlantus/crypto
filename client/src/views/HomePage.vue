@@ -72,11 +72,18 @@
               <tr v-for="coin in marketData" :key="coin.id">
                 <td>{{ coin.market_cap_rank }}</td>
                 <td>
-                  <div class="mt-1">
-                    <img v-bind:src="coin.image" :alt="`{{ coin.name }} image`">
-                  </div>
+                    <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }">
+                        <div class="mt-1">
+                            <img v-bind:src="coin.image" :alt="`{{ coin.name }} image`">
+                        </div>
+                    </router-link>
                 </td>
-                <td>{{ coin.name }} {{ coin.symbol.toUpperCase() }}</td>
+                <td>
+                    <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }">
+                    {{ coin.name }} 
+                    </router-link>
+                    ({{ coin.symbol.toUpperCase() }})
+                </td>
                 <td>${{ coin.current_price.toFixed(2) }}</td>
                 <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
                 <td>$ {{ coin.total_volume.toLocaleString() }}</td>

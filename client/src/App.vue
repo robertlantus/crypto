@@ -19,3 +19,20 @@
 <script setup>
 
 </script>
+
+
+<!-- <template>
+  <div>
+    <CoinDetails2 id="cardano" />
+  </div>
+</template>
+
+<script>
+import CoinDetails2 from './components/CoinDetails2.vue';
+
+export default {
+  components: {
+    CoinDetails2,
+  },
+};
+</script> -->
