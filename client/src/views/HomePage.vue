@@ -27,7 +27,6 @@
 </script>
 
 <template>
-  <div id="app">
 
     <header class="">
       <div class="box is-flex is-justify-content-space-between p-6">
@@ -73,16 +72,16 @@
                 <td>{{ coin.market_cap_rank }}</td>
                 <td>
                     <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }">
-                        <div class="mt-1">
+                        <div class="img">
                             <img v-bind:src="coin.image" :alt="`{{ coin.name }} image`">
                         </div>
                     </router-link>
                 </td>
                 <td>
-                    <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }">
-                    {{ coin.name }} 
+                    <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }" class="coin-name">
+                    {{ coin.name }} {{ coin.symbol.toUpperCase() }}
                     </router-link>
-                    ({{ coin.symbol.toUpperCase() }})
+                    
                 </td>
                 <td>${{ coin.current_price.toFixed(2) }}</td>
                 <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
@@ -95,14 +94,38 @@
         </div>
       </div>
     </main>
-  </div>
+
 </template>
 
 <style scoped>
-img {
-  width: 20px;
-  height: 20px;
+.logo a {
+    font-family: monospace;
+    font-size: 32px;
+    color: green;
 }
+
+.logo a:hover {
+    color: darkgreen;
+}
+
+.coin-name {
+    color: #222;
+}
+
+.coin-name:hover {
+    color: #000;
+}
+
+img {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+.img {
+    padding-top: 2px;
+}
+
 </style>
 
 

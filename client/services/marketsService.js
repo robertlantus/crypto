@@ -9,6 +9,6 @@ export const fetchMarketData = () => {
 };
 
 // Fetch data for a specific coin by ID
-export const fetchCoinData = (id) => {
+export const fetchCoinDataById = (id) => {
     return axios.get(`/api/coins/markets/${id}`);
 };

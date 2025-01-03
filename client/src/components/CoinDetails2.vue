@@ -17,7 +17,8 @@
   </template>
   
   <script>
-  import axios from 'axios';
+
+  import { fetchCoinDataById } from '../../services/marketsService';
   
   export default {
     props: {
@@ -37,10 +38,10 @@
       async fetchCoinDetails() {
         try {
           this.loading = true;
-          const response = await axios.get(`/api/coins/markets/${this.id}`);
-          console.log('API Response:', response.data); // Debugging
+          const response = await fetchCoinDataById(this.id);
+          console.log('API Response:', response.data); 
           if (response.data && response.data.data.length > 0) {
-            this.coin = response.data.data[0]; // Get the first coin
+            this.coin = response.data.data[0]; 
           } else {
             this.error = 'Coin data not found';
           }
