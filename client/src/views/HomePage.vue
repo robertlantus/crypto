@@ -1,28 +1,48 @@
 
 
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import { fetchMarketData } from '../../services/marketsService.js';
 
-  const marketData = ref([]);
-  const error = ref(null);
+import { ref, onMounted } from 'vue';
+import { fetchMarketData } from '../../services/marketsService.js';
+import CoinDetails from './CoinDetails.vue';
 
-  const loadMarketData = async () => {
+// State variables
+const marketData = ref([]);
+const error = ref(null);
+
+// Modal state
+const showModal = ref(false);
+const selectedCoinId = ref(null);
+
+// Load market data
+const loadMarketData = async () => {
     try {
-      const response = await fetchMarketData();
-      // console.log(response);
-      // console.log(response.data);
-      // console.log(response.data.data);
-      marketData.value = response.data.data;
+        const response = await fetchMarketData();
+        // console.log(response);
+        // console.log(response.data);
+        // console.log(response.data.data);
+        marketData.value = response.data.data;
 
     } catch (err) {
-      error.value = err.message || 'Failed to fetch market data';
+        error.value = err.message || 'Failed to fetch market data';
     }
-  };
+};
 
-  onMounted(() => {
+// Open modal
+const openModal = (id) => {
+    selectedCoinId.value = id;
+    showModal.value = true;
+}
+
+// Close modal
+const closeModal = () => {
+    showModal.value = false;
+    selectedCoinId.value = null;
+}
+
+onMounted(() => {
     loadMarketData();
-  });
+});
 
 </script>
 
@@ -71,16 +91,22 @@
               <tr v-for="coin in marketData" :key="coin.id">
                 <td>{{ coin.market_cap_rank }}</td>
                 <td>
-                    <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }">
+                    <!-- <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }"> -->
                         <div class="img">
-                            <img v-bind:src="coin.image" :alt="`{{ coin.name }} image`">
+                            <img 
+                                v-bind:src="coin.image" 
+                                :alt="`{{ coin.name }} image`"
+                                @click="openModal(coin.id)"   
+                            />
                         </div>
-                    </router-link>
+                    <!-- </router-link> -->
                 </td>
                 <td>
-                    <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }" class="coin-name">
-                    {{ coin.name }} {{ coin.symbol.toUpperCase() }}
-                    </router-link>
+                    <!-- <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }" class="coin-name"> -->
+                    <span @click="openModal(coin.id)" class="coin-name">
+                        {{ coin.name }} {{ coin.symbol.toUpperCase() }}
+                    </span>
+                    <!-- </router-link> -->
                     
                 </td>
                 <td>${{ coin.current_price.toFixed(2) }}</td>
@@ -94,6 +120,24 @@
         </div>
       </div>
     </main>
+
+    <!-- Coin Details Modal -->
+
+    <div v-if="showModal" class="modal is-active">
+      <div class="modal-background" @click="closeModal"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Coin Details</p>
+          <button class="delete" aria-label="close" @click="closeModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <CoinDetails :id="selectedCoinId" />
+        </section>
+        <footer class="modal-card-foot">
+          <button @click="closeModal" class="button is-danger">Close</button>
+        </footer>
+      </div>
+    </div>
 
 </template>
 
@@ -114,10 +158,12 @@
 
 .coin-name:hover {
     color: #000;
+    cursor: pointer;
 }
 
 img {
     display: block;
+    cursor: pointer;
     width: 20px;
     height: 20px;
 }
