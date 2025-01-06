@@ -10,9 +10,13 @@ import CoinDetails from './CoinDetails.vue';
 const marketData = ref([]);
 const error = ref(null);
 
-// Modal state
-const showModal = ref(false);
+// Coin Details Modal state
+const showCoinModal = ref(false);
 const selectedCoinId = ref(null);
+
+// Login/Signup Modal state
+const showAuthModal = ref(false);
+const authMode = ref('login');  // 'login' or 'signup'
 
 // Load market data
 const loadMarketData = async () => {
@@ -28,17 +32,28 @@ const loadMarketData = async () => {
     }
 };
 
-// Open modal
-const openModal = (id) => {
+// Open Coin Details modal
+const openCoinModal = (id) => {
     selectedCoinId.value = id;
-    showModal.value = true;
-}
+    showCoinModal.value = true;
+};
 
-// Close modal
-const closeModal = () => {
-    showModal.value = false;
+// Close Coin Details modal
+const closeCoinModal = () => {
+    showCoinModal.value = false;
     selectedCoinId.value = null;
-}
+};
+
+// Open Login/Signup modal
+const openAuthModal = (mode) => {
+    authMode.value = mode;      // 'login' or 'signup'
+    showAuthModal.value = true;
+};
+
+// Close Login/Signup modal
+const closeAuthModal = () => {
+    showAuthModal.value = false;
+};
 
 onMounted(() => {
     loadMarketData();
@@ -55,14 +70,20 @@ onMounted(() => {
         </div>
         <div class="login-section is-flex is-justify-content-space-between">
             <div class="login mx-3">
-                <a href="/login.html" class="button is-primary is-light is-responsive has-text-success is-outlined">
+                <button 
+                    @click="openAuthModal('login')"
+                    class="button is-primary is-light is-responsive has-text-success is-outlined"
+                >
                     <i class="fa-solid fa-user"></i><span class="pl-2">Login</span>
-                </a>
+                </button>
             </div>
             <div class="signup mx-3">
-                <a href="/signup.html" class="button is-primary is-light is-responsive has-text-success">
-                    <i class="fa-solid fa-user-plus"></i><span class="pl-2">Sign up</span>
-                </a>
+                <button 
+                    @click="openAuthModal('signup')"
+                    class="button is-primary is-light is-responsive has-text-success"
+                >
+                    <i class="fa-solid fa-user-plus"></i><span class="pl-2">Sign Up</span>
+                </button>
             </div>
         </div>
       </div>
@@ -71,7 +92,7 @@ onMounted(() => {
       </div>
     </header>
 
-    <main class="">
+    <main>
       <div class="container is-fluid">
         <div class="table-container">
           <p v-if="error">{{ error }}</p>
@@ -92,22 +113,22 @@ onMounted(() => {
                 <td>{{ coin.market_cap_rank }}</td>
                 <td>
                     <!-- <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }"> -->
-                        <div class="img">
-                            <img 
-                                v-bind:src="coin.image" 
-                                :alt="`{{ coin.name }} image`"
-                                @click="openModal(coin.id)"   
-                            />
-                        </div>
                     <!-- </router-link> -->
+                    <div class="img">
+                        <img 
+                            v-bind:src="coin.image" 
+                            :alt="`{{ coin.name }} image`"
+                            @click="openCoinModal(coin.id)"   
+                        />
+                    </div>
+
                 </td>
                 <td>
                     <!-- <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }" class="coin-name"> -->
-                    <span @click="openModal(coin.id)" class="coin-name">
+                    <!-- </router-link> -->
+                    <span @click="openCoinModal(coin.id)" class="coin-name">
                         {{ coin.name }} {{ coin.symbol.toUpperCase() }}
                     </span>
-                    <!-- </router-link> -->
-                    
                 </td>
                 <td>${{ coin.current_price.toFixed(2) }}</td>
                 <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
@@ -123,25 +144,66 @@ onMounted(() => {
 
     <!-- Coin Details Modal -->
 
-    <div v-if="showModal" class="modal is-active">
-      <div class="modal-background" @click="closeModal"></div>
+    <div v-if="showCoinModal" class="modal is-active">
+      <div class="modal-background" @click="closeCoinModal"></div>
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">Coin Details</p>
-          <button class="delete" aria-label="close" @click="closeModal"></button>
+          <button class="delete" aria-label="close" @click="closeCoinModal"></button>
         </header>
         <section class="modal-card-body">
           <CoinDetails :id="selectedCoinId" />
         </section>
         <footer class="modal-card-foot">
-          <button @click="closeModal" class="button is-danger">Close</button>
+          <button @click="closeCoinModal" class="button is-danger">Close</button>
         </footer>
       </div>
+    </div>
+
+    <!-- Login/Signup Modal -->
+
+    <div v-if="showAuthModal" class="modal is-active">
+        <div class="modal-background" @click="closeAuthModal"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">{{ authMode === 'login' ? 'Login' : 'Sign Up' }}</p>
+                <button class="delete" aria-label="close" @click="closeAuthModal"></button>
+            </header>
+
+            <section class="modal-card-body">
+                <form>
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Enter your username" />
+                        </div>
+                    </div>
+                    <div v-if="authMode === 'signup'" class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Enter your email" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control">
+                            <input type="text" class="input" placeholder="Enter your password" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button class="button is-primary" type="submit">
+                            {{ authMode === 'login' ? 'Login' : 'Sign Up' }}
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
 
 </template>
 
 <style scoped>
+
 .logo a {
     font-family: monospace;
     font-size: 32px;

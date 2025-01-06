@@ -48,7 +48,7 @@
       <div v-else-if="error">{{ error }}</div>
       <div v-else>
         <div class="is-flex is-flex-direction-row is-align-items-center">
-            <img :src="coin.image" :alt="coin.name" style="width: 40px;" />
+            <img :src="coin.image" :alt="coin.name" style="width: 40px; height: 40px;" />
             <div class="ml-6 is-size-4">
                 {{ coin.name }} ( {{ coin.symbol.toUpperCase() }} )
             </div>
@@ -61,10 +61,10 @@
             <p><span class="has-text-weight-medium mr-1">24h Change:</span> {{ coin.price_change_percentage_24h.toFixed(2) }}%</p>
             <p><span class="has-text-weight-medium mr-1">Total Volume:</span> ${{ coin.total_volume.toLocaleString() }}</p>
             <p><span class="has-text-weight-medium mr-1">Market Cap</span>: ${{ coin.market_cap.toLocaleString() }}</p>
-            <p><span class="has-text-weight-medium mr-1">Market Cap Change 24h:</span> ${{ coin.market_cap_change_24h.toLocaleString() }}</p>
+            <p><span class="has-text-weight-medium mr-1">Market Cap Change 24h:</span> ${{ Number(coin.market_cap_change_24h.toFixed()).toLocaleString() }}</p>
             <p><span class="has-text-weight-medium mr-1">Market Cap Percentage Change 24h:</span> {{ coin.market_cap_change_percentage_24h.toLocaleString() }}%</p>
-            <p><span class="has-text-weight-medium mr-1">Circulating supply:</span> {{ coin.circulating_supply.toLocaleString() }}</p>
-            <p><span class="has-text-weight-medium mr-1">Total supply:</span> {{ coin.total_supply.toLocaleString() }}</p>
+            <p><span class="has-text-weight-medium mr-1">Circulating supply:</span> {{ Number(coin.circulating_supply.toFixed()).toLocaleString() }}</p>
+            <p><span class="has-text-weight-medium mr-1">Total supply:</span> {{ Number(coin.total_supply.toFixed()).toLocaleString() }}</p>
             <p><span class="has-text-weight-medium mr-1">All Time High:</span> ${{ coin.ath.toLocaleString() }}</p>
             <p><span class="has-text-weight-medium mr-1">Ath change:</span> {{ coin.ath_change_percentage.toFixed(2) }}%</p>
             <p><span class="has-text-weight-medium mr-1">Ath date:</span> {{ formatDate(coin.ath_date) }}</p>

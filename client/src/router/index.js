@@ -17,13 +17,13 @@ const routes = [
     //     component: CoinDetails2,
     //     props: true, // This allows the `id` to be passed as a prop to the CoinDetails2 component
     // },
-    {
-        path: '/coin-details/:id',      // Dynamic route for coin details
-        name: 'CoinDetails',
-        component: CoinDetails,
-        props: true             // Pass route params as props to the component
-                                // This allows the `id` to be passed as a prop to the CoinDetails2 component
-    }
+    // {
+    //     path: '/coin-details/:id',      // Dynamic route for coin details
+    //     name: 'CoinDetails',
+    //     component: CoinDetails,
+    //     props: true             // Pass route params as props to the component
+    //                             // This allows the `id` to be passed as a prop to the CoinDetails2 component
+    // }
 ];
 
 const router = createRouter({
