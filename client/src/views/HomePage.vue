@@ -4,7 +4,8 @@
 
 import { ref, onMounted } from 'vue';
 import { fetchMarketData } from '../../services/marketsService.js';
-import CoinDetails from './CoinDetails.vue';
+import AuthModal from '../components/AuthModal.vue';
+import CoinModal from '../components/CoinModal.vue';
 
 // State variables
 const marketData = ref([]);
@@ -14,7 +15,7 @@ const error = ref(null);
 const showCoinModal = ref(false);
 const selectedCoinId = ref(null);
 
-// Login/Signup Modal state
+// Login / Signup Modal state
 const showAuthModal = ref(false);
 const authMode = ref('login');  // 'login' or 'signup'
 
@@ -44,15 +45,16 @@ const closeCoinModal = () => {
     selectedCoinId.value = null;
 };
 
-// Open Login/Signup modal
-const openAuthModal = (mode) => {
-    authMode.value = mode;      // 'login' or 'signup'
+// Open Login modal
+const openLoginModal = () => {
+    authMode.value = 'login';      
     showAuthModal.value = true;
 };
 
-// Close Login/Signup modal
-const closeAuthModal = () => {
-    showAuthModal.value = false;
+// Open Signup modal
+const openSignupModal = () => {
+    authMode.value = 'signup';      
+    showAuthModal.value = true;
 };
 
 onMounted(() => {
@@ -63,15 +65,18 @@ onMounted(() => {
 
 <template>
 
-    <header class="">
+    <header>
+
       <div class="box is-flex is-justify-content-space-between p-6">
+
         <div class="logo">
             <router-link to="/">gecko</router-link>
         </div>
+
         <div class="login-section is-flex is-justify-content-space-between">
             <div class="login mx-3">
                 <button 
-                    @click="openAuthModal('login')"
+                    @click="openLoginModal"
                     class="button is-primary is-light is-responsive has-text-success is-outlined"
                 >
                     <i class="fa-solid fa-user"></i><span class="pl-2">Login</span>
@@ -79,17 +84,20 @@ onMounted(() => {
             </div>
             <div class="signup mx-3">
                 <button 
-                    @click="openAuthModal('signup')"
+                    @click="openSignupModal"
                     class="button is-primary is-light is-responsive has-text-success"
                 >
                     <i class="fa-solid fa-user-plus"></i><span class="pl-2">Sign Up</span>
                 </button>
             </div>
         </div>
+
       </div>
+
       <div class="content is-flex is-justify-content-center py-6">
         <h1>Welcome to the gecko app</h1>
       </div>
+
     </header>
 
     <main>
@@ -144,7 +152,7 @@ onMounted(() => {
 
     <!-- Coin Details Modal -->
 
-    <div v-if="showCoinModal" class="modal is-active">
+    <!-- <div v-if="showCoinModal" class="modal is-active">
       <div class="modal-background" @click="closeCoinModal"></div>
       <div class="modal-card">
         <header class="modal-card-head">
@@ -158,47 +166,21 @@ onMounted(() => {
           <button @click="closeCoinModal" class="button is-danger">Close</button>
         </footer>
       </div>
-    </div>
+    </div> -->
 
-    <!-- Login/Signup Modal -->
+    <!-- Coin Details Modal -->
+    <CoinModal
+        v-if="showCoinModal"
+        :show="showCoinModal"
+        :coinId="selectedCoinId"
+        @close="closeCoinModal"
+    />
 
-    <div v-if="showAuthModal" class="modal is-active">
-        <div class="modal-background" @click="closeAuthModal"></div>
-        <div class="modal-card">
-            <header class="modal-card-head">
-                <p class="modal-card-title">{{ authMode === 'login' ? 'Login' : 'Sign Up' }}</p>
-                <button class="delete" aria-label="close" @click="closeAuthModal"></button>
-            </header>
-
-            <section class="modal-card-body">
-                <form>
-                    <div class="field">
-                        <label class="label">Username</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Enter your username" />
-                        </div>
-                    </div>
-                    <div v-if="authMode === 'signup'" class="field">
-                        <label class="label">Email</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Enter your email" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Password</label>
-                        <div class="control">
-                            <input type="text" class="input" placeholder="Enter your password" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <button class="button is-primary" type="submit">
-                            {{ authMode === 'login' ? 'Login' : 'Sign Up' }}
-                        </button>
-                    </div>
-                </form>
-            </section>
-        </div>
-    </div>
+    <!-- Import the AuthModal -->
+    <AuthModal
+        v-model:showAuthModal="showAuthModal"
+        :authMode="authMode"
+    />
 
 </template>
 

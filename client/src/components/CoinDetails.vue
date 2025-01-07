@@ -56,8 +56,8 @@
         <div class="mt-4">
             <p><span class="has-text-weight-medium mr-1">Last updated:</span> {{ formatDate(coin.last_updated) }}</p>
             <p><span class="has-text-weight-medium mr-1">Current Price:</span> ${{ coin.current_price.toLocaleString() }}</p>
-            <p><span class="has-text-weight-medium mr-1">24h Low:</span> ${{ coin.low_24h }}</p>
-            <p><span class="has-text-weight-medium mr-1">24h High:</span> ${{ coin.high_24h }}</p>
+            <p><span class="has-text-weight-medium mr-1">24h Low:</span> ${{ coin.low_24h.toLocaleString() }}</p>
+            <p><span class="has-text-weight-medium mr-1">24h High:</span> ${{ coin.high_24h.toLocaleString() }}</p>
             <p><span class="has-text-weight-medium mr-1">24h Change:</span> {{ coin.price_change_percentage_24h.toFixed(2) }}%</p>
             <p><span class="has-text-weight-medium mr-1">Total Volume:</span> ${{ coin.total_volume.toLocaleString() }}</p>
             <p><span class="has-text-weight-medium mr-1">Market Cap</span>: ${{ coin.market_cap.toLocaleString() }}</p>

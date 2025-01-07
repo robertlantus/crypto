@@ -3,7 +3,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import CoinDetails2 from "@/components/CoinDetails2.vue";
-import CoinDetails from "@/views/CoinDetails.vue";
+import CoinDetails from "@/components/CoinDetails.vue";
 
 const routes = [
     {
