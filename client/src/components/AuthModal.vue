@@ -1,7 +1,7 @@
 
 <script>
 import { ref, watch, toRefs } from 'vue';
-import { signupUser, loginUser } from '../../services/authService';
+import { signupUser, loginUser } from '../../services/authService.js';
 
 export default {
     props: {
@@ -15,31 +15,68 @@ export default {
             validator: (value) => ['login', 'signup'].includes(value),
         },
     },
-    emits: ['update:showAuthModal', 'authSuccess'],
+
+    emits: ['update:showAuthModal', 'authSuccess', 'signupSuccess', 'loginSuccess'],
+
     setup(props, { emit }) {
+
         const { showAuthModal } = toRefs(props);
         const username = ref('');
         const email = ref('');
         const password = ref('');
         const error = ref('');
+        const message = ref('');
 
         const handleAuth = async () => {
+
+            // Clear previous error and message
+            error.value = '';
+            message.value = '';
+
             try {
                 const userData = {
                     username: username.value, 
                     email: email.value,
-                    password: password.value,
+                    password: password.value
                 };
 
                 if (props.authMode === 'login') {
-                    await loginUser({ username: userData.username, password: userData.password });
-                    console.log('Logging in:', username.value);
+
+                    const isloggedIn = await loginUser({ 
+                        username: userData.username, 
+                        password: userData.password 
+                    });
+
+                    if (isloggedIn) {
+                        emit('loginSuccess');
+                        console.log('Logging in:', username.value);
+                    }
+                    
                 } else if (props.authMode === 'signup') {
-                    await signupUser(userData);
+
+                    const isSignedUp = await signupUser(userData);
+
+                    if (isSignedUp) {
+
+                        message.value = 'Sign up successful. Switching to login in 5 seconds.';
+                        
+                        setTimeout(() => {
+                            emit('signupSuccess');  // Emit signup success event after delay
+                            message.value = '';     // Clear the message
+                        }, 5000);
+
+                        console.log('Signup completed. Emitting signupSuccess.');
+
+                    } else {
+                        message.value = 'Signup failed. Please try again.';
+                    }
+            
                     console.log('Signing up:', username.value, email.value);
                 }
-                emit('update:showAuthModal', false);
+
+                // emit('update:showAuthModal', false);
                 emit('authSuccess');
+
             } catch (err) {
                 error.value = err.message || 'Authentication failed';
             }
@@ -51,6 +88,7 @@ export default {
                 email.value = '';
                 password.value = '';
                 error.value = '';
+                message.value = '';
             }
         });
 
@@ -59,9 +97,10 @@ export default {
             email,
             password,
             error,
-            handleAuth,
+            message,
+            handleAuth
         };
-    },
+    }
 };
 </script>
 
@@ -117,18 +156,32 @@ export default {
       </section>
 
       <footer class="modal-card-foot">
-        <button class="button is-primary" @click="handleAuth">
-          {{ authMode === 'login' ? 'Login' : 'Sign Up' }}
-        </button>
-        <button class="button ml-2" @click="$emit('update:showAuthModal', false)">Cancel</button>
+        
+        <!-- Buttons -->
+        <div v-if="!message" class="button-container">
+            <button class="button is-primary" @click="handleAuth">
+                {{ authMode === 'login' ? 'Login' : 'Sign Up' }}
+            </button>
+            <button class="button ml-2" @click="$emit('update:showAuthModal', false)">Cancel</button>
+        </div>
+        
+        <!-- Message -->
+        <div v-if="message" class="message">
+            {{ message }}
+        </div>
       </footer>
     </div>
   </div>
 </template>
 
 <style scoped>
+
 .modal-card {
   width: 400px;
   max-width: 90%;
+}
+
+.message {
+    color: darkgreen;
 }
 </style>

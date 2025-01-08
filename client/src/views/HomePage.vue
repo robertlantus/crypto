@@ -19,6 +19,19 @@ const selectedCoinId = ref(null);
 const showAuthModal = ref(false);
 const authMode = ref('login');  // 'login' or 'signup'
 
+// Handle Signup success
+const handleSignupSuccess = () => {
+    console.log('Signup successful. Switching to login mode.');
+    authMode.value = 'login'; // Switch to login mode
+    showAuthModal.value = true; // Open the modal in login mode
+};
+
+// Handle Login success
+const handleLoginSuccess = () => {
+    showAuthModal.value = false;        // Close the modal
+    console.log('Login successful. Modal closed.');
+}
+
 // Load market data
 const loadMarketData = async () => {
     try {
@@ -120,8 +133,6 @@ onMounted(() => {
               <tr v-for="coin in marketData" :key="coin.id">
                 <td>{{ coin.market_cap_rank }}</td>
                 <td>
-                    <!-- <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }"> -->
-                    <!-- </router-link> -->
                     <div class="img">
                         <img 
                             v-bind:src="coin.image" 
@@ -132,8 +143,6 @@ onMounted(() => {
 
                 </td>
                 <td>
-                    <!-- <router-link :to="{ name: 'CoinDetails', params: { id: coin.id } }" class="coin-name"> -->
-                    <!-- </router-link> -->
                     <span @click="openCoinModal(coin.id)" class="coin-name">
                         {{ coin.name }} {{ coin.symbol.toUpperCase() }}
                     </span>
@@ -151,24 +160,6 @@ onMounted(() => {
     </main>
 
     <!-- Coin Details Modal -->
-
-    <!-- <div v-if="showCoinModal" class="modal is-active">
-      <div class="modal-background" @click="closeCoinModal"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Coin Details</p>
-          <button class="delete" aria-label="close" @click="closeCoinModal"></button>
-        </header>
-        <section class="modal-card-body">
-          <CoinDetails :id="selectedCoinId" />
-        </section>
-        <footer class="modal-card-foot">
-          <button @click="closeCoinModal" class="button is-danger">Close</button>
-        </footer>
-      </div>
-    </div> -->
-
-    <!-- Coin Details Modal -->
     <CoinModal
         v-if="showCoinModal"
         :show="showCoinModal"
@@ -180,6 +171,8 @@ onMounted(() => {
     <AuthModal
         v-model:showAuthModal="showAuthModal"
         :authMode="authMode"
+        @signupSuccess="handleSignupSuccess"
+        @loginSuccess="handleLoginSuccess"
     />
 
 </template>
