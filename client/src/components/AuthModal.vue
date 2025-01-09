@@ -2,6 +2,7 @@
 <script>
 import { ref, watch, toRefs } from 'vue';
 import { signupUser, loginUser } from '../../services/authService.js';
+import { useRouter } from 'vue-router';
 
 export default {
     props: {
@@ -26,6 +27,7 @@ export default {
         const password = ref('');
         const error = ref('');
         const message = ref('');
+        const router = useRouter();
 
         const handleAuth = async () => {
 
@@ -47,9 +49,20 @@ export default {
                         password: userData.password 
                     });
 
+                    console.log(isloggedIn);
+
                     if (isloggedIn) {
+                        // Store the username in localStorage
+                        // localStorage.setItem('username', username.value);
+
+                        localStorage.setItem('username', userData.username);
+                        localStorage.setItem('jwtToken', isloggedIn.data.token);
+
                         emit('loginSuccess');
                         console.log('Logging in:', username.value);
+
+                        // Redirect to Dashboard
+                        router.push('/dashboard');
                     }
                     
                 } else if (props.authMode === 'signup') {
@@ -65,7 +78,7 @@ export default {
                             message.value = '';     // Clear the message
                         }, 5000);
 
-                        console.log('Signup completed. Emitting signupSuccess.');
+                        console.log('Signup completed. Emitting signup success.');
 
                     } else {
                         message.value = 'Signup failed. Please try again.';
@@ -78,7 +91,21 @@ export default {
                 emit('authSuccess');
 
             } catch (err) {
-                error.value = err.message || 'Authentication failed';
+
+                if (err.response && err.response.status === 409) {
+                    error.value = err.response.data.message || 'This username is already registered. Please try another username.';
+                } else if (err.response && err.response.status === 400) {
+                    error.value = err.response.data.message || 'Invalid request. Please check your input.';
+                } else if (err.response && err.response.status === 401) {
+                    error.value = err.response.data.message || 'Invalid username or password. Please check your credentials.';
+                } else if (err.response && err.response.status === 403) {
+                    error.value = err.response.data.message || 'Access denied. You may not have the required permissions.';
+                } else if (err.response && err.response.status === 500) {
+                    error.value = err.response.data.message || 'Server error. Please try again later.';
+                } else {
+                    error.value = err.message || 'Authentication failed. Please try again.';
+                }
+                
             }
         };
 

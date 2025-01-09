@@ -5,13 +5,13 @@ import Joi from 'joi';
 export const registerSchema = Joi.object({
 
     username: Joi.string()
-                 .min(3)
+                 .min(6)
                  .max(30)
                  .required()
                  .messages({
                     'string.base': 'Username must be a string',
                     'string.empty': 'Username is not allowed to be empty',
-                    'string.min': 'Username must be at least 3 characters long',
+                    'string.min': 'Username must be at least 6 characters long',
                     'string.max': 'Username cannot exceed 30 characters',
                     'any.required': 'Username field is required'
                 }),

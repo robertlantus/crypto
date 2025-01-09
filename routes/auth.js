@@ -67,8 +67,9 @@ router.post('/signup', async (req, res) => {
         // Handle duplicate key error (E11000)
         if (error.code === 11000) { 
             const duplicateField = Object.keys(error.keyValue)[0];
+            const duplicateValue = error.keyValue[duplicateField];
             return res.status(409).json({ 
-                message: `Duplicate value detected for ${duplicateField}: ${error.keyValue[duplicateField]}`,
+                message: `The ${duplicateField}: ${duplicateValue} is already registered. Please try another ${duplicateField}.`,
                 links: [
                     { rel: 'self', href: `${BASE_URL}/signup`, method: 'POST' },
                     { rel: 'login', href: `${BASE_URL}/login`, method: 'POST' }
