@@ -49,17 +49,17 @@ export default {
                         password: userData.password 
                     });
 
-                    console.log(isloggedIn);
+                    // console.log(isloggedIn);
 
                     if (isloggedIn) {
                         // Store the username in localStorage
                         // localStorage.setItem('username', username.value);
 
                         localStorage.setItem('username', userData.username);
-                        localStorage.setItem('jwtToken', isloggedIn.data.token);
+                        localStorage.setItem('authToken', isloggedIn.data.token);
 
                         emit('loginSuccess');
-                        console.log('Logging in:', username.value);
+                        // console.log('Logging in:', username.value);
 
                         // Redirect to Dashboard
                         router.push('/dashboard');
@@ -78,13 +78,13 @@ export default {
                             message.value = '';     // Clear the message
                         }, 5000);
 
-                        console.log('Signup completed. Emitting signup success.');
+                        // console.log('Signup completed. Emitting signup success.');
 
                     } else {
                         message.value = 'Signup failed. Please try again.';
                     }
             
-                    console.log('Signing up:', username.value, email.value);
+                    // console.log('Signing up:', username.value, email.value);
                 }
 
                 // emit('update:showAuthModal', false);

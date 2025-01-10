@@ -21,7 +21,7 @@ const authMode = ref('login');  // 'login' or 'signup'
 
 // Handle Signup success
 const handleSignupSuccess = () => {
-    console.log('Signup successful. Switching to login mode.');
+    // console.log('Signup successful. Switching to login mode.');
     authMode.value = 'login'; // Switch to login mode
     showAuthModal.value = true; // Open the modal in login mode
 };
@@ -29,7 +29,7 @@ const handleSignupSuccess = () => {
 // Handle Login success
 const handleLoginSuccess = () => {
     showAuthModal.value = false;        // Close the modal
-    console.log('Login successful. Modal closed.');
+    // console.log('Login successful. Modal closed.');
 }
 
 // Load market data
