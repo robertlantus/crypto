@@ -179,7 +179,7 @@ onMounted(() => {
 
 <style scoped>
 
-.logo a {
+/* .logo a {
     font-family: monospace;
     font-size: 32px;
     color: green;
@@ -187,7 +187,7 @@ onMounted(() => {
 
 .logo a:hover {
     color: darkgreen;
-}
+} */
 
 .coin-name {
     color: #222;
