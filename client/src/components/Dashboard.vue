@@ -8,32 +8,63 @@
         <button class="button is-danger" @click="handleLogout">Logout</button>
     </div>
     
-    <div class="block ml-6">
-        <h1 class="is-size-4">Welcome, {{ username }} !</h1>
-        <h2 class="is-size-5">Your Watchlists:</h2>
-        <ul class="ml-4" v-if="watchlists.length > 0">
-            <li v-for="watchlist in watchlists" :key="watchlist._id">
-            <span>{{ watchlist.name }}</span>
-            <!-- <button @click="editWatchlist(watchlist)">Edit</button> -->
-            <button @click="deleteWatchlist(watchlist._id)">
-                <span><i class="fa-solid fa-trash"></i></span>
-            </button>
-            </li>
-        </ul>
-        <p v-else>No watchlists found. Create one below!</p>
+    <div class="block m-6">
+        <h1 class="is-size-4 mb-3">Welcome, {{ username }} !</h1>
+
+        <div class="block is-flex is-justify-content-space-between">
+            <div class="block">
+                <h2 class="is-size-5 mb-2">Your Watchlists:</h2>
+                <div class="block">
+                    <ul class="ml-4" v-if="watchlists.length > 0">
+                        <li 
+                            v-for="watchlist in watchlists" 
+                            :key="watchlist._id" 
+                            class="is-flex is-align-items-center is-justify-content-space-between mb-2 p-2 box"
+                        >
+                            <span class="watchlist-name mr-2">{{ watchlist.name }}</span>
+                            <div>
+                                <button 
+                                    class="button is-small is-info is-light mr-2" 
+                                    @click="editWatchlist(watchlist)"
+                                >
+                                    <span class="icon">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </span>
+                                </button>
+                                <button 
+                                    class="button is-small is-danger is-light" 
+                                    @click="deleteWatchlist(watchlist._id)"
+                                >
+                                    <span class="icon">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <p v-else>No watchlists found. Create one!</p>
+                </div>
+
+            </div>
+
+            <div>
+                <h2 class="is-size-5 mb-2">Create a New Watchlist</h2>
+                <form @submit.prevent="createWatchlist">
+                    <input
+                        type="text"
+                        v-model="newWatchlistName"
+                        placeholder="Watchlist Name"
+                        required
+                        class="input is-primary mb-2"
+                    />
+                    <button type="submit" class="button is-primary">Create</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <!-- <div>
-      <h2>Create a New Watchlist</h2>
-      <form @submit.prevent="createWatchlist">
-        <input
-          type="text"
-          v-model="newWatchlistName"
-          placeholder="Watchlist Name"
-          required
-        />
-        <button type="submit">Create</button>
-      </form>
-    </div> -->
+    
+
     <!-- <div v-if="editMode">
       <h2>Edit Watchlist</h2>
       <form @submit.prevent="updateWatchlist">
@@ -59,6 +90,8 @@ import axios from 'axios';
       return {
         username: '',
         watchlists: [],
+        newWatchlistName: '',
+
       };
     },
 
@@ -97,6 +130,28 @@ import axios from 'axios';
             }
         },
 
+        async createWatchlist() {
+            try {
+                const token = localStorage.getItem('authToken');
+
+                const response = await axios.post(
+                    '/api/watchlists',
+                    { name: this.newWatchlistName },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                this.watchlists.push(response.data.watchlist);
+                this.newWatchlistName = '';
+
+            } catch (error) {
+                console.error('Error creating watchlist:', error.response?.data || error.message);
+            }
+        },
+
+        async editWatchlist(watchlist) {
+
+        },
+
         async deleteWatchlist(id) {
             try {
                 const token = localStorage.getItem('authToken');
@@ -124,5 +179,9 @@ import axios from 'axios';
 </script>
   
 <style scoped>
+
+    .watchlist-name {
+        font-size: 18px;
+    }
 
 </style>

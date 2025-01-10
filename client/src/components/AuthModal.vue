@@ -62,7 +62,7 @@ export default {
                         // console.log('Logging in:', username.value);
 
                         // Redirect to Dashboard
-                        router.push('/dashboard2');
+                        router.push('/dashboard');
                     }
                     
                 } else if (props.authMode === 'signup') {
