@@ -23,8 +23,9 @@ router.get('/', verifyToken, async (req, res) => {
         const watchlists = await Watchlist.find({ userId });
 
         if (!watchlists || watchlists.length === 0) {
-            return res.status(404).json({ 
-                message: 'No watchlist found for this user',
+            return res.status(200).json({ 
+                message: 'No watchlist found for this user. Create a new watchlist to get started.',
+                watchlists: [],
                 links: [
                     { rel: 'self', href: `${BASE_URL}`, method: 'GET' },
                     { rel: 'create', href: `${BASE_URL}`, method: 'POST' }

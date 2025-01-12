@@ -8,12 +8,12 @@
         <button class="button is-danger" @click="handleLogout">Logout</button>
     </div>
     
-    <div class="block m-6">
+    <div class="block mx-6">
         <h1 class="is-size-4 mb-3">Welcome, {{ username }} !</h1>
 
         <div class="block is-flex is-justify-content-space-between">
             <div class="block">
-                <h2 class="is-size-5 mb-2">Your Watchlists:</h2>
+                <h2 class="mb-2">Your Watchlists:</h2>
                 <div class="block">
                     <ul class="ml-4" v-if="watchlists.length > 0">
                         <li 
@@ -43,13 +43,13 @@
                         </li>
                     </ul>
 
-                    <p v-else>No watchlists found. Create one!</p>
+                    <p v-else>No watchlists found. Create one to get started!</p>
                 </div>
 
             </div>
 
-            <div>
-                <h2 class="is-size-5 mb-2">Create a New Watchlist</h2>
+            <div class="box new">
+                <h2 class="mb-2">Create a New Watchlist</h2>
                 <form @submit.prevent="createWatchlist">
                     <input
                         type="text"
@@ -60,24 +60,41 @@
                     />
                     <button type="submit" class="button is-primary">Create</button>
                 </form>
+
+                <!-- Render error message if watchlist name already exists -->
+                <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
             </div>
+
+        </div>
+
+        <div v-if="editMode" class="box edit" >
+    
+            <form @submit.prevent="updateWatchlist">
+                <div class="field">
+                    <label class="label has-text-weight-normal" for="edit-watchlist-name">New Watchlist Name</label>
+                    <div class="control">
+                        <input
+                        id="edit-watchlist-name"
+                        type="text"
+                        v-model="editWatchlistName"
+                        placeholder="Enter new watchlist name"
+                        required
+                        class="input is-primary"
+                        />
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" class="button is-primary">Save</button>
+                    </div>
+                    <div class="control">
+                        <button type="button" @click="cancelEdit" class="button is-light">Cancel</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    
 
-    <!-- <div v-if="editMode">
-      <h2>Edit Watchlist</h2>
-      <form @submit.prevent="updateWatchlist">
-        <input
-          type="text"
-          v-model="editWatchlistName"
-          placeholder="New Watchlist Name"
-          required
-        />
-        <button type="submit">Save</button>
-        <button @click="cancelEdit">Cancel</button>
-      </form>
-    </div> -->
   </div>
 
 </template>
@@ -91,7 +108,10 @@ import axios from 'axios';
         username: '',
         watchlists: [],
         newWatchlistName: '',
-
+        editWatchlistId: null,
+        editWatchlistName: '',
+        editMode: false,
+        errorMessage: ''
       };
     },
 
@@ -131,26 +151,105 @@ import axios from 'axios';
         },
 
         async createWatchlist() {
+
+            this.errorMessage = '';         // Reset error message before request
+
             try {
                 const token = localStorage.getItem('authToken');
 
-                const response = await axios.post(
-                    '/api/watchlists',
-                    { name: this.newWatchlistName },
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
+                // const response = await axios.post(
+                //     '/api/watchlists',
+                //     { name: this.newWatchlistName },
+                //     { headers: { Authorization: `Bearer ${token}` } }
+                // );
 
+                // console.log(response.data.links);
+
+                // this.watchlists.push(response.data.watchlist);
+                // this.newWatchlistName = '';
+
+                // Dynamically find the POST link for creating a watchlist
+                const postLink = {
+                    rel: 'self',
+                    href: '/api/watchlists',
+                    method: 'POST'
+                };
+
+                if (!postLink || postLink.method.toLowerCase() !== 'post') {
+                    throw new Error('No valid POST link found in the response');
+                }
+
+                // Make the dynamic POST request
+                const response = await axios({
+                    method: postLink.method,
+                    url: postLink.href,
+                    data: { name: this.newWatchlistName },
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                console.log('Watchlist created successfully:', response.data);
+
+                // Use the `links` in the response for further navigation or requests
+                const responseLinks = response.data.links;
+                console.log('Available links:', responseLinks);
+
+                // Add the new watchlist to the list without refetching all
                 this.watchlists.push(response.data.watchlist);
+
+                // Reset the input field
                 this.newWatchlistName = '';
 
             } catch (error) {
-                console.error('Error creating watchlist:', error.response?.data || error.message);
+
+                if (error.response && error.response.status === 409) {
+                    // Backend returns 409 for existing watchlist
+                    this.errorMessage = `A watchlist with the name "${this.newWatchlistName}" already exists.`;
+                } else {
+                    // Generic error handling
+                    console.error('Error creating watchlist:', error.response?.data || error.message);
+                    this.errorMessage = 'An error occurred. Please try again.';
+                }
             }
         },
 
-        async editWatchlist(watchlist) {
-
+        editWatchlist(watchlist) {
+            this.editWatchlistId = watchlist._id;
+            this.editWatchlistName = watchlist.name;
+            this.editMode = true;
         },
+
+        async updateWatchlist() {
+            try {
+                const token = localStorage.getItem('authToken');
+
+                const response = await axios.patch(
+                    `/api/watchlists/${this.editWatchlistId}`,
+                    { name: this.editWatchlistName },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                // Find the index of the watchlist to update
+                const index = this.watchlists.findIndex(
+                    (watchlist) => watchlist._id === this.editWatchlistId
+                );
+
+                // Directly update the array element
+                if (index !== -1) {
+                    this.watchlists[index] = response.data.watchlist;
+                }
+
+                this.cancelEdit();
+
+            } catch (error) {
+                console.error('Error updating watchlist:', error.response?.data || error.message);
+            }
+        },
+
+        cancelEdit() {
+            this.editMode = false;
+            this.editWatchlistId = null;
+            this.editWatchlistName = '';
+        },  
 
         async deleteWatchlist(id) {
             try {
@@ -180,8 +279,26 @@ import axios from 'axios';
   
 <style scoped>
 
+    h2, label {
+        font-size: 18px;
+    }
+
     .watchlist-name {
         font-size: 18px;
+    }
+
+    .edit {
+        width: 400px;
+    }
+
+    .new {
+        width: 440px;
+        height: 190px;
+    }
+
+    .error {
+        color: red;
+        margin: 8px;
     }
 
 </style>
