@@ -197,7 +197,7 @@ router.delete('/:id?', verifyToken, async (req, res) => {
     }
 });
 
-// Patch watchlist name by watchlist id and user id
+// Change watchlist name by watchlist id and user id
 // PATCH /api/watchlists/:id
 
 router.patch('/:id?', verifyToken, async (req, res) => {
@@ -253,6 +253,19 @@ router.patch('/:id?', verifyToken, async (req, res) => {
                 message: 'Not authorized to modify this watchlist',
                 links: [
                     { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+                ]
+            });
+        }
+
+        // Check for an existing watchlist with the same name for this user
+        const existingWatchlist = await Watchlist.findOne({ name, userId });
+
+        if (existingWatchlist) {
+            return res.status(409).json({ 
+                message: `A watchlist with the name: ${name} already exists for this user`,
+                links: [
+                    { rel: 'self', href: `${BASE_URL}`, method: 'POST' },
+                    { rel: 'get-all', href: `${BASE_URL}`, method: 'GET'}
                 ]
             });
         }

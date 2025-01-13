@@ -62,7 +62,7 @@
                 </form>
 
                 <!-- Render error message if watchlist name already exists -->
-                <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+                <p v-if="errorMessageNew" class="error">{{ errorMessageNew }}</p>
             </div>
 
         </div>
@@ -92,6 +92,9 @@
                     </div>
                 </div>
             </form>
+
+            <!-- Render error message if watchlist name already exists -->
+            <p v-if="errorMessageEdit" class="error">{{ errorMessageEdit }}</p>
         </div>
     </div>
 
@@ -111,7 +114,9 @@ import axios from 'axios';
         editWatchlistId: null,
         editWatchlistName: '',
         editMode: false,
-        errorMessage: ''
+        errorMessage: '',
+        errorMessageNew: '',
+        errorMessageEdit: ''
       };
     },
 
@@ -152,7 +157,7 @@ import axios from 'axios';
 
         async createWatchlist() {
 
-            this.errorMessage = '';         // Reset error message before request
+            this.errorMessageNew = '';         // Reset error message before request
 
             try {
                 const token = localStorage.getItem('authToken');
@@ -203,11 +208,11 @@ import axios from 'axios';
 
                 if (error.response && error.response.status === 409) {
                     // Backend returns 409 for existing watchlist
-                    this.errorMessage = `A watchlist with the name "${this.newWatchlistName}" already exists.`;
+                    this.errorMessageNew = `Watchlist named "${this.newWatchlistName}" already exists.`;
                 } else {
                     // Generic error handling
                     console.error('Error creating watchlist:', error.response?.data || error.message);
-                    this.errorMessage = 'An error occurred. Please try again.';
+                    this.errorMessageNew = 'An error occurred. Please try again.';
                 }
             }
         },
@@ -216,9 +221,13 @@ import axios from 'axios';
             this.editWatchlistId = watchlist._id;
             this.editWatchlistName = watchlist.name;
             this.editMode = true;
+            this.errorMessageEdit = ''; 
         },
 
         async updateWatchlist() {
+
+            this.errorMessageEdit = '';     // Reset error message before request
+
             try {
                 const token = localStorage.getItem('authToken');
 
@@ -241,7 +250,15 @@ import axios from 'axios';
                 this.cancelEdit();
 
             } catch (error) {
-                console.error('Error updating watchlist:', error.response?.data || error.message);
+
+                if (error.response && error.response.status === 409) {
+                    // Backend returns 409 for existing watchlist
+                    this.errorMessageEdit = `A watchlist with the name "${this.editWatchlistName}" already exists.`;
+                } else {
+                    // Generic error handling
+                    console.error('Error creating watchlist:', error.response?.data || error.message);
+                    this.errorMessageEdit = 'An error occurred. Please try again.';
+                }
             }
         },
 
@@ -287,12 +304,8 @@ import axios from 'axios';
         font-size: 18px;
     }
 
-    .edit {
-        width: 400px;
-    }
-
-    .new {
-        width: 440px;
+    .new, .edit {
+        min-width: 440px;
         height: 190px;
     }
 
