@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import Dashboard from "@/components/Dashboard.vue";
 import Dashboard2 from "@/components/Dashboard2.vue";
+import Coins from "@/components/Coins.vue";
 
 const routes = [
     {
@@ -20,6 +21,11 @@ const routes = [
         path:'/dashboard2',
         name: 'Dashboard2',
         component: Dashboard2
+    },
+    {
+        path:'/:id',
+        name: 'Coins',
+        component: Coins
     },
 
 ];

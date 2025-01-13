@@ -21,7 +21,8 @@
                             :key="watchlist._id" 
                             class="is-flex is-align-items-center is-justify-content-space-between mb-2 p-2 box"
                         >
-                            <span class="watchlist-name mr-2">{{ watchlist.name }}</span>
+                            <!-- <span class="watchlist-name mr-2">{{ watchlist.name }}</span> -->
+                             <a @click="goToCoinsPage(watchlist._id)" class="watchlist-name mr-2">{{ watchlist.name }}</a>
                             <div>
                                 <button 
                                     class="button is-small is-info is-light mr-2" 
@@ -234,8 +235,8 @@ import axios from 'axios';
                 const response = await axios.patch(
                     `/api/watchlists/${this.editWatchlistId}`,
                     { name: this.editWatchlistName },
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
+                    { headers: { Authorization: `Bearer ${token}` }
+                });
 
                 // Find the index of the watchlist to update
                 const index = this.watchlists.findIndex(
@@ -283,6 +284,10 @@ import axios from 'axios';
             }
         },
 
+        goToCoinsPage(watchlistId) {
+            this.$router.push({ name: 'Coins', params: { id: watchlistId } });
+        },
+
         handleLogout() {
             localStorage.removeItem('username');
             localStorage.removeItem('authToken');
@@ -298,6 +303,12 @@ import axios from 'axios';
 
     h2, label {
         font-size: 18px;
+    }
+
+    a, a:link, a:visited, a:hover, a:active {
+        color: inherit;
+        text-decoration: inherit;
+        font-weight: inherit;
     }
 
     .watchlist-name {
