@@ -48,11 +48,12 @@
                             <img 
                                 v-bind:src="coin.image" 
                                 :alt="`{{ coin.name }} image`"
+                                @click="openCoinModal(coin.id)" 
                             />
                         </div>
                     </td>
                     <td>
-                        <span class="coin-name">
+                        <span @click="openCoinModal(coin.id)" class="coin-name">
                             {{ coin.name }} {{ coin.symbol.toUpperCase() }}
                         </span>
                     </td>
@@ -69,13 +70,27 @@
 
     </div>
 
+        <!-- Coin Details Modal -->
+        <CoinModal
+            v-if="showCoinModal"
+            :show="showCoinModal"
+            :coinId="selectedCoinId"
+            @close="closeCoinModal"
+        />
+
 </template>
 
 
 <script>
 import axios from 'axios';
+import CoinModal from '../components/CoinModal.vue';
 
 export default {
+
+    components: {
+        CoinModal
+    },
+
     data() {
         return {
             username: '',
@@ -83,6 +98,8 @@ export default {
             coins: [],
             newCoin: '',
             error: '',
+            showCoinModal: false,       // Controls whether the modal is displayed
+            selectedCoinId: null        // Stores the ID of the selected coin
         };
     },
 
@@ -134,6 +151,16 @@ export default {
             }
         },
 
+        openCoinModal(id) {
+            this.selectedCoinId = id;       // Set the selected coin ID
+            this.showCoinModal = true;      // Show the modal
+        },
+
+        closeCoinModal() {
+            this.showCoinModal = false;     // Hide the modal
+            this.selectedCoinId = null;     // Clear the selected coin ID
+        },
+
         handleLogout() {
             localStorage.removeItem('username');
             localStorage.removeItem('authToken');
@@ -166,6 +193,15 @@ img {
 
 .img {
     padding-top: 2px;
+}
+
+.coin-name {
+    color: #222;
+}
+
+.coin-name:hover {
+    color: #000;
+    cursor: pointer;
 }
 
 </style>
