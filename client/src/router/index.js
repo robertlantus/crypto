@@ -27,6 +27,13 @@ const routes = [
         name: 'Coins',
         component: Coins
     },
+    {
+        path: '/watchlists/:id',
+        name: 'Watchlist',
+        component: Coins,
+        props: true, // Ensure route params are passed as props
+    },
+    
 
 ];
 
