@@ -105,7 +105,7 @@
 
 <script>
 import axios from 'axios';
-import CoinModal from '../components/CoinModal.vue';
+import CoinModal from './CoinModal.vue';
 
 export default {
 
@@ -193,8 +193,8 @@ export default {
             const token = localStorage.getItem('authToken');
             const watchlistId = this.watchlistId;       // Reference the initialized watchlistId
 
-            console.log('Token:', token);
-            console.log('Watchlist ID (method):', watchlistId);
+            // console.log('Token:', token);
+            // console.log('Watchlist ID (method):', watchlistId);
 
             try {
                 const response = await axios.patch(`/api/watchlists/${this.watchlistId}/remove-coins`, 
@@ -238,7 +238,7 @@ export default {
         this.fetchWatchlistData();
         // Assign watchlist ID from route params
         this.watchlistId = this.$route.params.id;
-        console.log('Watchlist ID (mounted):', this.watchlistId); // Debugging
+        // console.log('Watchlist ID (mounted):', this.watchlistId); // Debugging
     }
 }
 
@@ -246,25 +246,5 @@ export default {
 
 
 <style scoped>
-
-img {
-    display: block;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-}
-
-.img {
-    padding-top: 2px;
-}
-
-.coin-name {
-    color: #222;
-}
-
-.coin-name:hover {
-    color: #000;
-    cursor: pointer;
-}
 
 </style>

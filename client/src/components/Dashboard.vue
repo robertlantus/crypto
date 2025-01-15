@@ -99,14 +99,75 @@
         </div>
     </div>
 
+    <main>
+      <div class="container is-fluid mt-6">
+        <div class="table-container">
+          <p v-if="error">{{ error }}</p>
+          <table v-if="marketData.length" class="table is-striped is-narrow is-fullwidth is-hoverable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th></th>
+                <th>Coin</th>
+                <th>Price (USD)</th>
+                <th>24h</th>
+                <th>24h Volume</th>
+                <th>Market Cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="coin in marketData" :key="coin.id">
+                <td>{{ coin.market_cap_rank }}</td>
+                <td>
+                    <div class="img">
+                        <img 
+                            v-bind:src="coin.image" 
+                            :alt="`{{ coin.name }} image`"
+                            @click="openCoinModal(coin.id)"   
+                        />
+                    </div>
+
+                </td>
+                <td>
+                    <span @click="openCoinModal(coin.id)" class="coin-name">
+                        {{ coin.name }} {{ coin.symbol.toUpperCase() }}
+                    </span>
+                </td>
+                <td>${{ coin.current_price.toFixed(2) }}</td>
+                <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
+                <td>$ {{ coin.total_volume.toLocaleString() }}</td>
+                <td>$ {{ coin.market_cap.toLocaleString() }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p v-else>No market data available</p>
+        </div>
+      </div>
+    </main>
+
+        <!-- Coin Details Modal -->
+        <CoinModal
+            v-if="showCoinModal"
+            :show="showCoinModal"
+            :coinId="selectedCoinId"
+            @close="closeCoinModal"
+        />
+
   </div>
 
 </template>
   
 <script>
 import axios from 'axios';
+import { fetchMarketData } from '../../services/marketsService.js';
+import CoinModal from './CoinModal.vue';
 
   export default {
+
+    components: {
+        CoinModal
+    },
+
     data() {
       return {
         username: '',
@@ -117,7 +178,11 @@ import axios from 'axios';
         editMode: false,
         errorMessage: '',
         errorMessageNew: '',
-        errorMessageEdit: ''
+        errorMessageEdit: '',
+        marketData: [],
+        error: '',
+        showCoinModal: false,       // Controls whether the modal is displayed
+        selectedCoinId: null        // Stores the ID of the selected coin
       };
     },
 
@@ -130,6 +195,7 @@ import axios from 'axios';
         // Invoke fetchWatchlists when the component is mounted
         // console.log('mounted hook triggered');
         this.fetchWatchlists();
+        this.loadMarketData();
     },
 
     methods: {
@@ -193,11 +259,11 @@ import axios from 'axios';
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                console.log('Watchlist created successfully:', response.data);
+                // console.log('Watchlist created successfully:', response.data);
 
                 // Use the `links` in the response for further navigation or requests
                 const responseLinks = response.data.links;
-                console.log('Available links:', responseLinks);
+                // console.log('Available links:', responseLinks);
 
                 // Add the new watchlist to the list without refetching all
                 this.watchlists.push(response.data.watchlist);
@@ -288,6 +354,25 @@ import axios from 'axios';
             this.$router.push({ name: 'Coins', params: { id: watchlistId } });
         },
 
+        async loadMarketData() {
+            try {
+                const response = await fetchMarketData();
+                this.marketData = response.data.data;
+            } catch (error) {
+                error.value = err.message || 'Failed to fetch market data';
+            }
+        },
+
+        openCoinModal(id) {
+            this.selectedCoinId = id;       // Set the selected coin ID
+            this.showCoinModal = true;      // Show the modal
+        },
+
+        closeCoinModal() {
+            this.selectedCoinId = null;
+            this.showCoinModal = false;
+        },
+
         handleLogout() {
             localStorage.removeItem('username');
             localStorage.removeItem('authToken');
@@ -316,7 +401,7 @@ import axios from 'axios';
     }
 
     .new, .edit {
-        min-width: 440px;
+        width: 440px;
         height: 190px;
     }
 

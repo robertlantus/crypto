@@ -179,36 +179,6 @@ onMounted(() => {
 
 <style scoped>
 
-/* .logo a {
-    font-family: monospace;
-    font-size: 32px;
-    color: green;
-}
-
-.logo a:hover {
-    color: darkgreen;
-} */
-
-.coin-name {
-    color: #222;
-}
-
-.coin-name:hover {
-    color: #000;
-    cursor: pointer;
-}
-
-img {
-    display: block;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-}
-
-.img {
-    padding-top: 2px;
-}
-
 </style>
 
 
