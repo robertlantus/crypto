@@ -376,7 +376,6 @@ import CoinModal from './CoinModal.vue';
         handleLogout() {
             localStorage.removeItem('username');
             localStorage.removeItem('authToken');
-            // alert('You have been logged out');
             this.$router.push('/');                     // Redirect to homepage
         }
     }

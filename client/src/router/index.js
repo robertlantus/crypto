@@ -5,6 +5,7 @@ import HomePage from "../views/HomePage.vue";
 import Dashboard from "@/components/Dashboard.vue";
 import Dashboard2 from "@/components/Dashboard2.vue";
 import Coins from "@/components/Coins.vue";
+import CoinsDynamic from "@/components/CoinsDynamic.vue";
 
 const routes = [
     {
@@ -22,10 +23,15 @@ const routes = [
         name: 'Dashboard2',
         component: Dashboard2
     },
+    // {
+    //     path:'/:id',
+    //     name: 'Coins',
+    //     component: Coins
+    // },
     {
         path:'/:id',
         name: 'Coins',
-        component: Coins
+        component: CoinsDynamic
     },
     {
         path: '/watchlists/:id',

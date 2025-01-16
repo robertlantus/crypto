@@ -19,7 +19,7 @@
 
                 <h2 class="is-size-5 my-3"><span class="has-text-weight-medium">{{ watchlistName }}</span></h2>
             </div>
-            <div class="block mx-6 mt-4">
+            <!-- <div class="block mx-6 mt-4">
 
                 <form @submit.prevent="addCoin">
                     <input 
@@ -29,11 +29,15 @@
                     />
                     <button type="submit" class="button is-primary">Add Coin</button>
 
-                    <!-- Display validation error -->
                     <p v-if="validationError" class="has-text-danger mt-2">{{ validationError }}</p>
                 </form>
 
+            </div> -->
+            <div class="mr-6">
+                <!-- AddCoin component -->
+                <AddCoin :coins="allCoins" @add-coin="handleAddCoin" />
             </div>
+
         </div>
 
         <div class="container is-fluid">
@@ -106,11 +110,15 @@
 <script>
 import axios from 'axios';
 import CoinModal from './CoinModal.vue';
+import AddCoin from './AddCoin.vue';
 
 export default {
 
+    name: "Coins",
+
     components: {
-        CoinModal
+        CoinModal,
+        AddCoin
     },
 
     data() {
@@ -123,7 +131,8 @@ export default {
             error: '',
             validationError: '',
             showCoinModal: false,       // Controls whether the modal is displayed
-            selectedCoinId: null        // Stores the ID of the selected coin
+            selectedCoinId: null,        // Stores the ID of the selected coin
+            allCoins: [], // Full list of coins fetched from your backend
         };
     },
 
@@ -148,44 +157,32 @@ export default {
             }
         },
 
-        async addCoin() {
+        // Dynamic search and addition of coins to watchlist
 
-            const token = localStorage.getItem('authToken');
-            const watchlistId = this.$route.params.id;
+        async fetchAllCoins() {
+            // Fetch all coins from your backend and populate allCoins
+            const response = await axios.get("/api/coins/markets"); // Adjust API route
+            this.allCoins = response.data.data;
+        },
 
-            // Clear any existing validation error
-            this.validationError = '';
-
-            if (!this.newCoin.trim()) {
-                this.validationError = 'Please enter a valid coin ID';
-                return;
-            }
-
+        async handleAddCoin(coin) {
+            // Logic to handle adding a coin to the user's watchlist
             try {
-                // Make the API request to add the coin
-                const response = await axios.post(`/api/watchlists/${watchlistId}/add-coins`,
-                    { ids: [this.newCoin.trim()] },                 // Send the coin ID in the request body as an array
-                    { headers: { Authorization: `Bearer ${token}` }
-                });
+                const token = localStorage.getItem("authToken");
+                const watchlistId = this.$route.params.id;
 
-                // console.log('Response from addCoin:', response.data);
+                await axios.post(`/api/watchlists/${watchlistId}/add-coins`,
+                    { ids: [coin.id] },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                // alert(`${coin.name} added to your watchlist!`);
 
                 // Re-fetch the watchlist to get full coin details and update the UI
                 await this.fetchWatchlistData();
 
-                // Clear the input field and error message
-                this.newCoin = ''; 
-                this.validationError = '';
-
             } catch (error) {
                 console.error('Error adding coin:', error.response?.data || error.message);
-
-                // Handle 404 server-side errors
-                if (error.response?.status === 404) {
-                    this.validationError = `Coin not found: "${this.newCoin.trim()}"`;
-                } else {
-                    this.validationError = 'An unexpected error occurred. Please try again.';
-                }
             }
         },
 
@@ -240,6 +237,7 @@ export default {
         // Assign watchlist ID from route params
         this.watchlistId = this.$route.params.id;
         // console.log('Watchlist ID (mounted):', this.watchlistId); // Debugging
+        this.fetchAllCoins();
     }
 }
 

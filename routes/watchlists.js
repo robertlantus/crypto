@@ -198,7 +198,7 @@ router.delete('/:id?', verifyToken, async (req, res) => {
 });
 
 // Change watchlist name by watchlist id and user id
-// PATCH /api/watchlists/:id
+// PATCH /api/watchlists/:id?
 
 router.patch('/:id?', verifyToken, async (req, res) => {
 
