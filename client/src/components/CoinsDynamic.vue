@@ -83,7 +83,7 @@
                             @click="removeCoin(coin.id)"
                         >
                             <span class="icon">
-                                <i class="fa-solid fa-trash"></i>
+                                <i class="fa-solid fa-trash fa-lg"></i>
                             </span>
                         </button>
                     </td>

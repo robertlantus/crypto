@@ -29,7 +29,7 @@
                                     @click="editWatchlist(watchlist)"
                                 >
                                     <span class="icon">
-                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-pen custom-icon"></i>
                                     </span>
                                 </button>
                                 <button 
@@ -37,7 +37,7 @@
                                     @click="deleteWatchlist(watchlist._id)"
                                 >
                                     <span class="icon">
-                                        <i class="fa-solid fa-trash"></i>
+                                        <i class="fa-solid fa-trash custom-icon"></i>
                                     </span>
                                 </button>
                             </div>
@@ -402,6 +402,10 @@ import CoinModal from './CoinModal.vue';
     .new, .edit {
         width: 440px;
         height: 190px;
+    }
+
+    .custom-icon {
+        font-size: 14px;
     }
 
     .error {
