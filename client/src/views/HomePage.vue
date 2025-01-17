@@ -6,6 +6,7 @@ import { ref, onMounted } from 'vue';
 import { fetchMarketData } from '../../services/marketsService.js';
 import AuthModal from '../components/AuthModal.vue';
 import CoinModal from '../components/CoinModal.vue';
+import CryptoTable from '@/components/CryptoTable.vue';
 
 // State variables
 const marketData = ref([]);
@@ -115,47 +116,13 @@ onMounted(() => {
 
     <main>
       <div class="container is-fluid">
-        <div class="table-container">
-          <p v-if="error">{{ error }}</p>
-          <table v-if="marketData.length" class="table is-striped is-narrow is-fullwidth is-hoverable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th></th>
-                <th>Coin</th>
-                <th>Price (USD)</th>
-                <th>24h</th>
-                <th>24h Volume</th>
-                <th>Market Cap</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="coin in marketData" :key="coin.id">
-                <td>{{ coin.market_cap_rank }}</td>
-                <td>
-                    <div class="img">
-                        <img 
-                            v-bind:src="coin.image" 
-                            :alt="`{{ coin.name }} image`"
-                            @click="openCoinModal(coin.id)"   
-                        />
-                    </div>
 
-                </td>
-                <td>
-                    <span @click="openCoinModal(coin.id)" class="coin-name">
-                        {{ coin.name }} {{ coin.symbol.toUpperCase() }}
-                    </span>
-                </td>
-                <td>${{ coin.current_price.toFixed(2) }}</td>
-                <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
-                <td>$ {{ coin.total_volume.toLocaleString() }}</td>
-                <td>$ {{ coin.market_cap.toLocaleString() }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <p v-else>No market data available</p>
-        </div>
+        <CryptoTable
+            :marketData="marketData"
+            :error="error"
+            @open-modal="openCoinModal"
+        />
+
       </div>
     </main>
 

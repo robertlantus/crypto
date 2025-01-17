@@ -19,20 +19,7 @@
 
                 <h2 class="is-size-5 my-3"><span class="has-text-weight-medium">{{ watchlistName }}</span></h2>
             </div>
-            <!-- <div class="block mx-6 mt-4">
 
-                <form @submit.prevent="addCoin">
-                    <input 
-                        v-model="newCoin" 
-                        placeholder="Enter coin ID (ex: bitcoin)" 
-                        class="input mb-2"
-                    />
-                    <button type="submit" class="button is-primary">Add Coin</button>
-
-                    <p v-if="validationError" class="has-text-danger mt-2">{{ validationError }}</p>
-                </form>
-
-            </div> -->
             <div class="mr-6">
                 <!-- AddCoin component -->
                 <AddCoin :coins="allCoins" @add-coin="handleAddCoin" />
@@ -41,57 +28,14 @@
         </div>
 
         <div class="container is-fluid">
-            <div class="table-container">
-            <p v-if="error">{{ error }}</p>
-            <table v-if="coins.length" class="table is-striped is-narrow is-fullwidth is-hoverable">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th></th>
-                    <th>Coin</th>
-                    <th>Price (USD)</th>
-                    <th>24h</th>
-                    <th>24h Volume</th>
-                    <th>Market Cap</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="coin in coins" :key="coin.id">
-                    <td>{{ coin.market_cap_rank }}</td>
-                    <td>
-                        <div class="img">
-                            <img 
-                                v-bind:src="coin.image" 
-                                :alt="`{{ coin.name }} image`"
-                                @click="openCoinModal(coin.id)" 
-                            />
-                        </div>
-                    </td>
-                    <td>
-                        <span @click="openCoinModal(coin.id)" class="coin-name">
-                            {{ coin.name }} {{ coin.symbol.toUpperCase() }}
-                        </span>
-                    </td>
-                    <td>${{ coin.current_price.toFixed(2) }}</td>
-                    <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
-                    <td>$ {{ coin.total_volume.toLocaleString() }}</td>
-                    <td>$ {{ coin.market_cap.toLocaleString() }}</td>
-                    <td>
-                        <button 
-                            class="button is-small is-danger is-light" 
-                            @click="removeCoin(coin.id)"
-                        >
-                            <span class="icon">
-                                <i class="fa-solid fa-trash fa-lg"></i>
-                            </span>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <p v-else class="is-size-5 ml-4">Add coins to this watchlist</p>
-            </div>
+
+            <CryptoTableDelete
+                :coins="coins"
+                :error="error"
+                @open-modal="openCoinModal"
+                @remove-coin="removeCoin"
+            />
+
         </div>
 
     </div>
@@ -111,6 +55,7 @@
 import axios from 'axios';
 import CoinModal from './CoinModal.vue';
 import AddCoin from './AddCoin.vue';
+import CryptoTableDelete from './CryptoTableDelete.vue';
 
 export default {
 
@@ -118,7 +63,8 @@ export default {
 
     components: {
         CoinModal,
-        AddCoin
+        AddCoin,
+        CryptoTableDelete
     },
 
     data() {
