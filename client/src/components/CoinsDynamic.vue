@@ -72,10 +72,8 @@ export default {
             username: '',
             watchlistName: '',
             coins: [],
-            newCoin: '',
             watchlistId: '',
             error: '',
-            validationError: '',
             showCoinModal: false,       // Controls whether the modal is displayed
             selectedCoinId: null,        // Stores the ID of the selected coin
             allCoins: [], // Full list of coins fetched from your backend
@@ -179,10 +177,10 @@ export default {
     },
 
     mounted() {
-        this.fetchWatchlistData();
         // Assign watchlist ID from route params
         this.watchlistId = this.$route.params.id;
-        // console.log('Watchlist ID (mounted):', this.watchlistId); // Debugging
+
+        this.fetchWatchlistData();
         this.fetchAllCoins();
     }
 }

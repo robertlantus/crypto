@@ -8,7 +8,8 @@ import { defineProps, defineEmits } from 'vue';
 defineProps({
     coins: {
             type: Array,
-            required: true
+            required: true,
+            default: () => []
         },
     error: {
         type: String,
@@ -17,15 +18,36 @@ defineProps({
 });
 
 // Emit events
-const emit = defineEmits(['open-modal', 'remove-coin']);
+// const emit = defineEmits(['open-modal', 'remove-coin']);
+
+const emit = defineEmits([
+  /**
+   * Emitted when a coin modal is opened.
+   * @param {string} id - The ID of the selected coin.
+   */
+  'open-modal',
+  /**
+   * Emitted when a coin is removed.
+   * @param {string} id - The ID of the coin to be removed.
+   */
+  'remove-coin',
+]);
 
 // Methods
 const openCoinModal = (id) => {
+    if (!id) {
+      console.error('Invalid coin ID provided');
+      return;
+    }
     // Emit the event to parent
     emit('open-modal', id);
 };
 
 const removeCoin = (id) => {
+  if (!id) {
+    console.error('Invalid coin ID provided');
+    return;
+  }
   emit('remove-coin', id);
 };
 
@@ -37,14 +59,14 @@ const removeCoin = (id) => {
       <table v-if="coins.length" class="table is-striped is-narrow is-fullwidth is-hoverable">
           <thead>
             <tr>
-                <th>#</th>
-                <th></th>
-                <th>Coin</th>
-                <th>Price (USD)</th>
-                <th>24h</th>
-                <th>24h Volume</th>
-                <th>Market Cap</th>
-                <th></th>
+                <th scope="col">#</th>
+                <th scope="col"></th>
+                <th scope="col">Coin</th>
+                <th scope="col">Price (USD)</th>
+                <th scope="col">24h</th>
+                <th scope="col">24h Volume</th>
+                <th scope="col">Market Cap</th>
+                <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -54,7 +76,7 @@ const removeCoin = (id) => {
                   <div class="img">
                       <img 
                           v-bind:src="coin.image" 
-                          :alt="`{{ coin.name }} image`"
+                          :alt="`${coin.name} image`"
                           @click="openCoinModal(coin.id)" 
                       />
                   </div>
