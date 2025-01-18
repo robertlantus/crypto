@@ -106,36 +106,36 @@ router.patch('/:id/remove-coins', verifyToken, async (req, res) => {
     }
 });
 
-// Route to retrieve a watchlist by ID with full coin details
-router.get('/:id', verifyToken, async (req, res) => {
-    const { id: watchlistId } = req.params;
-    const userId = req.user._id;
+// // Route to retrieve a watchlist by ID with full coin details
+// router.get('/:id', verifyToken, async (req, res) => {
+//     const { id: watchlistId } = req.params;
+//     const userId = req.user._id;
 
-    // Validate watchlist ID
-    if (!watchlistId || !mongoose.isValidObjectId(watchlistId)) {
-        return sendErrorResponse(res, 400, 'Invalid watchlist ID format', generateLinksGet(watchlistId));
-    }
+//     // Validate watchlist ID
+//     if (!watchlistId || !mongoose.isValidObjectId(watchlistId)) {
+//         return sendErrorResponse(res, 400, 'Invalid watchlist ID format', generateLinksGet(watchlistId));
+//     }
 
-    try {
-        const watchlist = await Watchlist.findOne({ _id: watchlistId, userId });
-        if (!watchlist) {
-            return sendErrorResponse(res, 404, "Watchlist not found for the provided user", generateLinksGet(watchlistId));
-        }
+//     try {
+//         const watchlist = await Watchlist.findOne({ _id: watchlistId, userId });
+//         if (!watchlist) {
+//             return sendErrorResponse(res, 404, "Watchlist not found for the provided user", generateLinksGet(watchlistId));
+//         }
 
-        const coinDetails = await getCryptoDataById(COIN_MARKET_KEY, watchlist.coins);
+//         const coinDetails = await getCryptoDataById(COIN_MARKET_KEY, watchlist.coins);
 
-        res.status(200).json({
-            name: watchlist.name,
-            coins: coinDetails,
-            createdAt: watchlist.createdAt,
-            updatedAt: watchlist.updatedAt,
-            links: generateLinksGet(watchlistId),
-        });
-    } catch (error) {
-        console.error("Error fetching watchlist:", error);
-        sendErrorResponse(res, 500, 'An internal server error occurred', generateLinksGet(watchlistId));
-    }
-});
+//         res.status(200).json({
+//             name: watchlist.name,
+//             coins: coinDetails,
+//             createdAt: watchlist.createdAt,
+//             updatedAt: watchlist.updatedAt,
+//             links: generateLinksGet(watchlistId),
+//         });
+//     } catch (error) {
+//         console.error("Error fetching watchlist:", error);
+//         sendErrorResponse(res, 500, 'An internal server error occurred', generateLinksGet(watchlistId));
+//     }
+// });
 
 export default router;
 

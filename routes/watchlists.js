@@ -7,6 +7,9 @@ import Watchlist from '../models/watchlistModel.js';
 import verifyToken from '../middleware/verifyToken.js';
 import mongoose from 'mongoose';
 
+import { getCryptoDataById } from '../services/redisService.js';
+import { COIN_MARKET_KEY } from '../jobs/cronJobs.js';
+
 const router = express.Router();
 
 const BASE_URL = '/api/watchlists';
@@ -308,6 +311,69 @@ router.patch('/:id?', verifyToken, async (req, res) => {
                 { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
             ] 
         });
+    }
+});
+
+// Route to retrieve a watchlist by ID with full coin details
+// GET /api/watchlists/:id?
+
+router.get('/:id', verifyToken, async (req, res) => {
+    const { id: watchlistId } = req.params;
+    const userId = req.user._id;
+
+    if (!watchlistId || watchlistId.trim() === '') {
+        return res.status(400).json({
+            message: 'Please provide a valid watchlist ID',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
+    }
+
+    if (!mongoose.isValidObjectId(watchlistId)) {
+        return res.status(400).json({
+            message: 'Invalid watchlist ID format',
+            links: [
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
+    }
+
+    try {
+        const watchlist = await Watchlist.findOne({ _id: watchlistId, userId });
+        if (!watchlist) {
+            return res.status(404).json({
+                message: 'Watchlist not found',
+                links: [
+                    { rel: 'self', href: `${BASE_URL}/${watchlistId}`, method: 'GET' },
+                    { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+                ]
+            });
+        }
+
+        const coinDetails = await getCryptoDataById(COIN_MARKET_KEY, watchlist.coins);
+
+        res.status(200).json({
+            name: watchlist.name,
+            coins: coinDetails,
+            createdAt: watchlist.createdAt,
+            updatedAt: watchlist.updatedAt,
+            links: [
+                { rel: 'self', href: `${BASE_URL}/${watchlistId}`, method: 'GET' },
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ]
+        });
+    } catch (error) {
+        console.error('Error fetching watchlist by id:', error);
+
+        res.status(500).json({ 
+            message: 'Internal server error',
+            links: [
+                { rel: 'self', href: `${BASE_URL}/${watchlistId}`, method: 'GET' },
+                { rel: 'get-all', href: `${BASE_URL}`, method: 'GET' }
+            ] 
+        });
+        
     }
 });
 

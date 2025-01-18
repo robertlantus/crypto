@@ -129,6 +129,7 @@ import axiosInterceptor from '../../axiosUtility/axiosInterceptor.js';
 import { fetchMarketData } from '../../services/marketsService.js';
 import CoinModal from './CoinModal.vue';
 import CryptoTable from './CryptoTable.vue';
+import { link } from 'joi';
 
   export default {
 
@@ -195,12 +196,60 @@ import CryptoTable from './CryptoTable.vue';
             }
         },
 
+        async fetchApiLinks() {
+            try {
+                // Fetch the API links from the server
+                const response = await axios.get('/api');
+                const links = response.data.links;
+
+                // Save links in local storage
+                localStorage.setItem('apiLinks', JSON.stringify(links));
+
+                return links;
+
+            } catch (error) {
+                console.error('Error fetching API links:', error);
+                return [];
+            }
+        },
+
         async createWatchlist() {
 
             this.errorMessageNew = '';         // Reset error message before request
 
             try {
+                // Retrieve API links from local storage
+                let links = JSON.parse(localStorage.getItem('apiLinks'));
+
+                if (!links) {
+                    links = await this.fetchApiLinks();
+                }
+
+                // Find the link for creating a new watchlist
+                const createWatchlistLink = links.find(link => link.rel === 'create-watchlist' && link.method === 'POST');
+
+                if (!createWatchlistLink) {
+                    throw new Error('Create watchlist link not found');
+                }
+
+                // Perform the API call using the dynamic URL
                 const token = localStorage.getItem('authToken');
+
+                const response = await axios.post(
+                    createWatchlistLink.href,
+                    { name: this.newWatchlistName },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                // console.log('Watchlist created:', response.data);
+
+                // Add the new watchlist to the list without refetching all
+                this.watchlists.push(response.data.watchlist);
+
+                // Reset the input field
+                this.newWatchlistName = '';
+
+                // The Hardcoded Solution below
 
                 // const response = await axios.post(
                 //     '/api/watchlists',
@@ -208,41 +257,37 @@ import CryptoTable from './CryptoTable.vue';
                 //     { headers: { Authorization: `Bearer ${token}` } }
                 // );
 
+                // console.log(response);
+                // console.log(response.data.links);
                 // console.log(response.data.links);
 
                 // this.watchlists.push(response.data.watchlist);
                 // this.newWatchlistName = '';
 
                 // Dynamically find the POST link for creating a watchlist
-                const postLink = {
-                    rel: 'self',
-                    href: '/api/watchlists',
-                    method: 'POST'
-                };
+                // const postLink = {
+                //     rel: 'self',
+                //     href: '/api/watchlists',
+                //     method: 'POST'
+                // };
 
-                if (!postLink || postLink.method.toLowerCase() !== 'post') {
-                    throw new Error('No valid POST link found in the response');
-                }
+                // if (!postLink || postLink.method.toLowerCase() !== 'post') {
+                //     throw new Error('No valid POST link found in the response');
+                // }
 
                 // Make the dynamic POST request
-                const response = await axios({
-                    method: postLink.method,
-                    url: postLink.href,
-                    data: { name: this.newWatchlistName },
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                // const response = await axios({
+                //     method: postLink.method,
+                //     url: postLink.href,
+                //     data: { name: this.newWatchlistName },
+                //     headers: { Authorization: `Bearer ${token}` }
+                // });
 
                 // console.log('Watchlist created successfully:', response.data);
 
                 // Use the `links` in the response for further navigation or requests
-                const responseLinks = response.data.links;
+                // const responseLinks = response.data.links;
                 // console.log('Available links:', responseLinks);
-
-                // Add the new watchlist to the list without refetching all
-                this.watchlists.push(response.data.watchlist);
-
-                // Reset the input field
-                this.newWatchlistName = '';
 
             } catch (error) {
 

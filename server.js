@@ -18,6 +18,7 @@ import markets from './routes/markets.js';
 import auth from './routes/auth.js';
 import watchlists from './routes/watchlists.js';
 import coins from './routes/coins.js';
+import metaRoutes from './routes/metaRoutes.js';
 import handleRoot from './routes/handleRoot.js';
 
 const PORT = process.env.PORT || 3333;
@@ -58,6 +59,9 @@ app.use('/api/watchlists', watchlists);
 
 // coins operations endpoints
 app.use('/api/watchlists', coins);
+
+// API links
+app.use('/api', metaRoutes);
 
 // handle root endpoint
 app.use('/api', handleRoot);

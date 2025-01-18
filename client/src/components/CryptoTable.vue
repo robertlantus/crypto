@@ -59,7 +59,7 @@ const openCoinModal = (id) => {
                 {{ coin.name }} {{ coin.symbol.toUpperCase() }}
               </span>
             </td>
-            <td>${{ coin.current_price.toFixed(2) }}</td>
+            <td>${{ Number(coin.current_price.toFixed(2)).toLocaleString() }}</td>
             <td>{{ coin.price_change_percentage_24h.toFixed(2) }}%</td>
             <td>$ {{ coin.total_volume.toLocaleString() }}</td>
             <td>$ {{ coin.market_cap.toLocaleString() }}</td>
