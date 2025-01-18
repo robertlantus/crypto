@@ -1,7 +1,7 @@
 
 // client/services/marketsServices.js
 
-import axios from "../axiosConfig.js";
+import axios from "../axiosUtility/axiosConfig.js";
 
 // Fetch all market data
 export const fetchMarketData = () => {

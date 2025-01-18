@@ -125,6 +125,7 @@
   
 <script>
 import axios from 'axios';
+import axiosInterceptor from '../../axiosUtility/axiosInterceptor.js';
 import { fetchMarketData } from '../../services/marketsService.js';
 import CoinModal from './CoinModal.vue';
 import CryptoTable from './CryptoTable.vue';
@@ -175,7 +176,11 @@ import CryptoTable from './CryptoTable.vue';
                 const token = localStorage.getItem('authToken');
                 // console.log('Auth Token:', token);
 
-                const response = await axios.get('/api/watchlists', {
+                // const response = await axios.get('/api/watchlists', {
+                //     headers: { Authorization: `Bearer ${token}` }
+                // });
+
+                const response = await axiosInterceptor.get('/api/watchlists', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 

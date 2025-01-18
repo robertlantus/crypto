@@ -53,6 +53,7 @@
 
 <script>
 import axios from 'axios';
+import axiosInterceptor from '../../axiosUtility/axiosInterceptor';
 import CoinModal from './CoinModal.vue';
 import AddCoin from './AddCoin.vue';
 import CryptoTableDelete from './CryptoTableDelete.vue';
@@ -87,7 +88,11 @@ export default {
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await axios.get(`api/watchlists/${watchlistId}`, {
+                // const response = await axios.get(`api/watchlists/${watchlistId}`, {
+                //     headers: { Authorization: `Bearer ${token}` },
+                // });
+
+                const response = await axiosInterceptor.get(`api/watchlists/${watchlistId}`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
@@ -115,7 +120,8 @@ export default {
                 const token = localStorage.getItem("authToken");
                 const watchlistId = this.$route.params.id;
 
-                await axios.post(`/api/watchlists/${watchlistId}/add-coins`,
+                await axios.post(
+                    `/api/watchlists/${watchlistId}/add-coins`,
                     { ids: [coin.id] },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -138,8 +144,15 @@ export default {
             // console.log('Token:', token);
             // console.log('Watchlist ID (method):', watchlistId);
 
+            // Ensure watchlistId is defined
+            if (!watchlistId) {
+                console.error('Watchlist ID is not defined');
+                return;
+            }
+
             try {
-                const response = await axios.patch(`/api/watchlists/${this.watchlistId}/remove-coins`, 
+                const response = await axios.patch(
+                    `/api/watchlists/${watchlistId}/remove-coins`, 
                     { ids: [coinId] },        // Send the coin ID as an array
                     { headers: { Authorization: `Bearer ${token}` }
                 });
