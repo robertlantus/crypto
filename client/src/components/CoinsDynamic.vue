@@ -179,6 +179,7 @@ export default {
         handleLogout() {
             localStorage.removeItem('username');
             localStorage.removeItem('authToken');
+            localStorage.removeItem('apiLinks');
             // alert('You have been logged out');
             this.$router.push('/');                     // Redirect to homepage
         }

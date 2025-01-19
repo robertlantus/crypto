@@ -49,7 +49,8 @@
 
             </div>
 
-            <div class="box new">
+            <div v-if="newWatchlistLink" class="box new">
+                
                 <h2 class="mb-2">Create a New Watchlist</h2>
                 <form @submit.prevent="createWatchlist">
                     <input
@@ -129,7 +130,6 @@ import axiosInterceptor from '../../axiosUtility/axiosInterceptor.js';
 import { fetchMarketData } from '../../services/marketsService.js';
 import CoinModal from './CoinModal.vue';
 import CryptoTable from './CryptoTable.vue';
-import { link } from 'joi';
 
   export default {
 
@@ -151,8 +151,9 @@ import { link } from 'joi';
         errorMessageEdit: '',
         marketData: [],
         error: '',
-        showCoinModal: false,       // Controls whether the modal is displayed
-        selectedCoinId: null        // Stores the ID of the selected coin
+        showCoinModal: false,        // Controls whether the modal is displayed
+        selectedCoinId: null,        // Stores the ID of the selected coin
+        newWatchlistLink: null       // Initially null until API data is fetched
       };
     },
 
@@ -162,10 +163,10 @@ import { link } from 'joi';
     },
 
     mounted() {
-        // Invoke fetchWatchlists when the component is mounted
         // console.log('mounted hook triggered');
-        this.fetchWatchlists();
-        this.loadMarketData();
+        this.fetchWatchlists();     // Existing function to fetch watchlists
+        this.loadMarketData();      // Existing function to load market data
+        this.fetchApiLinks();       // Fetch API links and update `newWatchlistLink`
     },
 
     methods: {
@@ -202,13 +203,20 @@ import { link } from 'joi';
                 const response = await axios.get('/api');
                 const links = response.data.links;
 
+                // Find the "create-watchlist" link
+                const createLink = links.find(link => link.rel === 'create-watchlist' && link.method === 'POST');
+
                 // Save links in local storage
                 localStorage.setItem('apiLinks', JSON.stringify(links));
+
+                // Update the reactive property to control form rendering
+                this.newWatchlistLink = createLink || null; // Set null if the link is not found
 
                 return links;
 
             } catch (error) {
                 console.error('Error fetching API links:', error);
+                this.newWatchlistLink = null;       // Ensure the form stays hidden if there's an error
                 return [];
             }
         },
@@ -228,6 +236,8 @@ import { link } from 'joi';
                 // Find the link for creating a new watchlist
                 const createWatchlistLink = links.find(link => link.rel === 'create-watchlist' && link.method === 'POST');
 
+                // console.log(createWatchlistLink);
+
                 if (!createWatchlistLink) {
                     throw new Error('Create watchlist link not found');
                 }
@@ -235,11 +245,22 @@ import { link } from 'joi';
                 // Perform the API call using the dynamic URL
                 const token = localStorage.getItem('authToken');
 
-                const response = await axios.post(
-                    createWatchlistLink.href,
-                    { name: this.newWatchlistName },
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
+                // const response = await axios.post(
+                //     createWatchlistLink.href,
+                //     { name: this.newWatchlistName },
+                //     { headers: { Authorization: `Bearer ${token}` } }
+                // );
+
+                const response = await axios({
+                    method: createWatchlistLink.method,
+                    url: createWatchlistLink.href,
+                    data: {
+                        name: this.newWatchlistName
+                    },
+                    headers: { 
+                        Authorization: `Bearer ${token}` 
+                    } 
+                });
 
                 // console.log('Watchlist created:', response.data);
 
@@ -263,31 +284,6 @@ import { link } from 'joi';
 
                 // this.watchlists.push(response.data.watchlist);
                 // this.newWatchlistName = '';
-
-                // Dynamically find the POST link for creating a watchlist
-                // const postLink = {
-                //     rel: 'self',
-                //     href: '/api/watchlists',
-                //     method: 'POST'
-                // };
-
-                // if (!postLink || postLink.method.toLowerCase() !== 'post') {
-                //     throw new Error('No valid POST link found in the response');
-                // }
-
-                // Make the dynamic POST request
-                // const response = await axios({
-                //     method: postLink.method,
-                //     url: postLink.href,
-                //     data: { name: this.newWatchlistName },
-                //     headers: { Authorization: `Bearer ${token}` }
-                // });
-
-                // console.log('Watchlist created successfully:', response.data);
-
-                // Use the `links` in the response for further navigation or requests
-                // const responseLinks = response.data.links;
-                // console.log('Available links:', responseLinks);
 
             } catch (error) {
 
@@ -394,6 +390,7 @@ import { link } from 'joi';
         handleLogout() {
             localStorage.removeItem('username');
             localStorage.removeItem('authToken');
+            localStorage.removeItem('apiLinks');
             this.$router.push('/');                     // Redirect to homepage
         }
     }
