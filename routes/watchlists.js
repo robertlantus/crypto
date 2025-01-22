@@ -354,6 +354,7 @@ router.get('/:id', verifyToken, async (req, res) => {
         const coinDetails = await getCryptoDataById(COIN_MARKET_KEY, watchlist.coins);
 
         res.status(200).json({
+            message: 'Watchlists retrieved successfully by id',
             name: watchlist.name,
             coins: coinDetails,
             createdAt: watchlist.createdAt,

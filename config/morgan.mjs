@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Log file stream setup
-const logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+const logStream = fs.createWriteStream(path.join(__dirname, 'accessoooo.log'), { flags: 'a' });
 
 // Define custom logging format
 

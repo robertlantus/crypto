@@ -204,7 +204,7 @@ import CryptoTable from './CryptoTable.vue';
                 const links = response.data.links;
 
                 // Find the "create-watchlist" link
-                const createLink = links.find(link => link.rel === 'create-watchlist' && link.method === 'POST');
+                const createLink = links.find(link => link.rel === 'create-watchlist');
 
                 // Save links in local storage
                 localStorage.setItem('apiLinks', JSON.stringify(links));
@@ -234,7 +234,7 @@ import CryptoTable from './CryptoTable.vue';
                 }
 
                 // Find the link for creating a new watchlist
-                const createWatchlistLink = links.find(link => link.rel === 'create-watchlist' && link.method === 'POST');
+                const createWatchlistLink = links.find(link => link.rel === 'create-watchlist');
 
                 // console.log(createWatchlistLink);
 
@@ -416,7 +416,7 @@ import CryptoTable from './CryptoTable.vue';
 
     .new, .edit {
         width: 440px;
-        height: 190px;
+        height: 210px;
     }
 
     .error {
