@@ -131,3 +131,17 @@ GET /api/coins/markets 200 25.588 ms
 GET /api 304 0.467 ms
 GET /api/coins/markets 304 24.830 ms
 GET /api/coins/markets 304 1.650 ms
+GET /api/coins/markets 200 13.949 ms
+GET /api/coins/markets/bitcoin 200 2.869 ms
+GET /api/coins/markets 304 4.795 ms
+GET /api/coins/markets 304 1.660 ms
+POST /api/auth/login 200 80.848 ms
+GET /api/coins/markets 304 2.323 ms
+GET /api 304 0.973 ms
+GET /api/watchlists 200 31.898 ms
+GET /api/coins/markets 200 5.344 ms
+GET /api/watchlists/678f842151f2af7f0affcc0f 200 30.049 ms
+POST /api/watchlists/678f842151f2af7f0affcc0f/add-coins 200 8.851 ms
+GET /api/watchlists/678f842151f2af7f0affcc0f 200 6.258 ms
+PATCH /api/watchlists/678f842151f2af7f0affcc0f/remove-coins 200 11.686 ms
+GET /api/coins/markets 304 2.099 ms

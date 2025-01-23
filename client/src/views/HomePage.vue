@@ -5,7 +5,7 @@
 import { ref, onMounted } from 'vue';
 import { fetchMarketData } from '../../services/marketsService.js';
 import AuthModal from '../components/AuthModal.vue';
-import CoinModal from '../components/CoinModal.vue';
+// import CoinModal from '../components/CoinModal.vue';
 import CryptoTable from '@/components/CryptoTable.vue';
 
 // State variables
@@ -13,8 +13,8 @@ const marketData = ref([]);
 const error = ref(null);
 
 // Coin Details Modal state
-const showCoinModal = ref(false);
-const selectedCoinId = ref(null);
+// const showCoinModal = ref(false);
+// const selectedCoinId = ref(null);
 
 // Login / Signup Modal state
 const showAuthModal = ref(false);
@@ -48,16 +48,16 @@ const loadMarketData = async () => {
 };
 
 // Open Coin Details modal
-const openCoinModal = (id) => {
-    selectedCoinId.value = id;
-    showCoinModal.value = true;
-};
+// const openCoinModal = (id) => {
+//     selectedCoinId.value = id;
+//     showCoinModal.value = true;
+// };
 
 // Close Coin Details modal
-const closeCoinModal = () => {
-    showCoinModal.value = false;
-    selectedCoinId.value = null;
-};
+// const closeCoinModal = () => {
+//     showCoinModal.value = false;
+//     selectedCoinId.value = null;
+// };
 
 // Open Login modal
 const openLoginModal = () => {
@@ -117,22 +117,27 @@ onMounted(() => {
     <main>
       <div class="container is-fluid">
 
-        <CryptoTable
+        <!-- <CryptoTable
             :marketData="marketData"
             :error="error"
             @open-modal="openCoinModal"
+        /> -->
+
+        <CryptoTable
+            :marketData="marketData"
+            :error="error"
         />
 
       </div>
     </main>
 
     <!-- Coin Details Modal -->
-    <CoinModal
+    <!-- <CoinModal
         v-if="showCoinModal"
         :show="showCoinModal"
         :coinId="selectedCoinId"
         @close="closeCoinModal"
-    />
+    /> -->
 
     <!-- Import the AuthModal -->
     <AuthModal
