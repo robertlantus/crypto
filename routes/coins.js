@@ -38,7 +38,7 @@ router.post('/:id/add-coins', verifyToken, async (req, res) => {
     if (validationError) return validationError;
 
     try {
-        const idsArr = [...new Set(ids.map((coin) => coin.trim()))]; // Ensure unique, trimmed IDs
+        const idsArr = [...new Set(ids.map((coin) => coin.trim()))]; // Ensure unique, trimmed IDs, using Set data structure and spread operator
         const coinsData = await getCryptoDataById(COIN_MARKET_KEY, idsArr);
 
         if (!coinsData || coinsData.length === 0) {

@@ -125,6 +125,8 @@ router.post('/login', async (req, res) => {
         // Compare provided password with stored encrypted password
         const passwordMatch = await user.comparePassword(password);
 
+        // console.log(passwordMatch);
+
         if (!passwordMatch) {
             return res.status(401).json({ 
                 message: 'Invalid username or password',

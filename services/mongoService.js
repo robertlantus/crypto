@@ -73,7 +73,7 @@ export const getAllCryptoDataFromMongo = async () => {
 
 export const getCryptoDataByIdFromMongo = async (ids) => {
     try {
-        const data = await Crypto.find({id: { $in: ids } });
+        const data = await Crypto.find({id: { $in: ids } });    // The query retrieves all documents where the id matches any value in the ids array.
         return data;
         
     } catch (error) {

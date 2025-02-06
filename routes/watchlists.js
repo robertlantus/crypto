@@ -134,7 +134,7 @@ router.put('/', async (req, res) => {
             { rel: 'create', href: `${BASE_URL}`, method: 'POST' },
         ]
     });     
-})
+});
 
 // Remove watchlist by watchlist id and user id
 // DELETE /api/watchlists/:id

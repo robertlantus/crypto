@@ -92,6 +92,9 @@ export default {
 
             } catch (err) {
 
+                console.log(err.response.status);
+                console.log(err.response.data.message);
+
                 if (err.response && err.response.status === 409) {
                     error.value = err.response.data.message || 'This username is already registered. Please try another username.';
                 } else if (err.response && err.response.status === 400) {
